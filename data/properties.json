@@ -1,0 +1,350 @@
+{
+  "aluguel": [
+    {
+      "id": "a1",
+      "tipo": "Área Privativa",
+      "titulo": "Área Privativa – Palmares",
+      "bairro": "Palmares",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 3,
+      "banheiros": 2,
+      "vagas": 2,
+      "area": null,
+      "elevador": true,
+      "condominio": "R$ 400,00",
+      "iptu": "R$ 338,06",
+      "preco": 4200,
+      "descricao": "Área privativa - sala 02 ambientes, 03 quartos com armários, suíte com box e armário, banheiro social com box e armário, cozinha com armários, fogão cooktop, banheiro de serviço, quarto de serviço com armários, área de serviço, área privativa em L, 02 vagas cobertas de garagem. Prédio com elevador.",
+      "imagens": [
+        "palmares-1.jpg",
+        "imovel-1780073801533-a76c2591.png"
+      ],
+      "destaque": true,
+      "category": "aluguel"
+    },
+    {
+      "id": "a2",
+      "tipo": "Cobertura",
+      "titulo": "Cobertura – Santa Rosa",
+      "bairro": "Santa Rosa",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 3,
+      "banheiros": 1,
+      "vagas": 1,
+      "area": null,
+      "elevador": false,
+      "condominio": "R$ 250,00",
+      "iptu": "R$ 100,00",
+      "preco": 3500,
+      "descricao": "Cobertura - 02 salas, 03 quartos (01 com armário), banheiro social com box, lavabo, cozinha, área de serviço, cobertura parcialmente coberta, com estrutura para área gourmet e 01 vaga descoberta.",
+      "imagens": [
+        "santa-rosa-1.jpg"
+      ],
+      "destaque": true
+    },
+    {
+      "id": "a3",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento – Santa Mônica",
+      "bairro": "Santa Mônica",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 3,
+      "banheiros": 2,
+      "vagas": 1,
+      "area": null,
+      "elevador": true,
+      "condominio": "R$ 620,00 (incluso água)",
+      "iptu": "R$ 139,90",
+      "preco": 2200,
+      "descricao": "Apto - Varanda, 03 quartos (suíte com box e armário), sala 02 ambientes, banheiro social com box e armário, cozinha com armário, área de serviço e 01 vaga coberta. Prédio com elevador.",
+      "imagens": [
+        "santa-monica-1.jpg"
+      ],
+      "destaque": true
+    },
+    {
+      "id": "a4",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento – Planalto",
+      "bairro": "Planalto",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 2,
+      "banheiros": 1,
+      "vagas": 1,
+      "area": null,
+      "elevador": true,
+      "condominio": "R$ 360,00",
+      "iptu": "R$ 104,27",
+      "preco": 1900,
+      "descricao": "Apartamento - 02 quartos com persianas (sendo 01 com armário), sala, cozinha com armários, banheiro com box e armário, área de serviço e 01 vaga de garagem coberta. Prédio com Elevador - Porteiro - Área de Lazer (Piscina - Salão de Jogos - Área Gourmet).",
+      "imagens": [
+        "planalto-1.jpg"
+      ],
+      "destaque": true
+    },
+    {
+      "id": "a5",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento – Itapoã",
+      "bairro": "Itapoã",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 3,
+      "banheiros": 1,
+      "vagas": 1,
+      "area": null,
+      "elevador": false,
+      "condominio": "R$ 210,00 (incluso água)",
+      "iptu": "R$ 107,91",
+      "preco": 1500,
+      "descricao": "Apto - 03 quartos, sendo 02 com armários, sala, cozinha com armários, banheiro social com box, área de serviço, 01 vaga de garagem coberta.",
+      "imagens": [
+        "itapoa-1.jpg"
+      ],
+      "destaque": false
+    }
+  ],
+  "lojas": [
+    {
+      "id": "l1",
+      "tipo": "Prédio/Galeria",
+      "titulo": "Prédio / Galeria Comercial – Planalto",
+      "bairro": "Planalto",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 6,
+      "vagas": 0,
+      "area": 999,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 500,00",
+      "preco": 25000,
+      "descricao": "Prédio / Galeria Comercial na avenida, ideal para instituição de ensino, clínica, financeira, escritório, telemarketing e afins. Espaço com toda infraestrutura, ar condicionado em todas as salas, com ou sem mobiliário. Aproximadamente 12 salas, sala de reunião com banheiro, 06 banheiros, recepção, refeitório, teto retrátil.",
+      "imagens": [
+        "planalto-comercial-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l2",
+      "tipo": "Loja",
+      "titulo": "Loja – Vila Clóris (110m²)",
+      "bairro": "Vila Clóris",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 2,
+      "vagas": 0,
+      "area": 110,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 266,98",
+      "preco": 6000,
+      "descricao": "Loja - 110m² - Excelente localização com 02 banheiros.",
+      "imagens": [
+        "vila-cloris-loja1-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l3",
+      "tipo": "Loja",
+      "titulo": "Loja – Heliópolis (100m²)",
+      "bairro": "Heliópolis",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 2,
+      "vagas": 0,
+      "area": 100,
+      "elevador": false,
+      "condominio": "R$ 250,00 (Cond + IPTU)",
+      "iptu": "",
+      "preco": 5500,
+      "descricao": "Loja - 100m² - Excelente localização. Vão livre ou com 02 salas e 02 banheiros. Ao lado da Academia Pratique.",
+      "imagens": [
+        "heliopolis-loja-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l4",
+      "tipo": "Loja",
+      "titulo": "Loja – Buritis (~67m²)",
+      "bairro": "Buritis",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 1,
+      "vagas": 1,
+      "area": 67,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 245,00",
+      "preco": 5500,
+      "descricao": "Loja - Aproximadamente 67m² com banheiro, mezanino e 01 vaga de garagem.",
+      "imagens": [
+        "buritis-loja-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l5",
+      "tipo": "Galpão",
+      "titulo": "Galpão – Garças (~300m²)",
+      "bairro": "Garças",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 2,
+      "vagas": 0,
+      "area": 300,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 303,75",
+      "preco": 3000,
+      "descricao": "Galpão - aproximadamente 300m² - com 02 salas, 02 banheiros, mezanino e área externa.",
+      "imagens": [
+        "garcas-galpao-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l6",
+      "tipo": "Loja",
+      "titulo": "Loja – Vila Clóris (55m²)",
+      "bairro": "Vila Clóris",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 1,
+      "vagas": 0,
+      "area": 55,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 135,00",
+      "preco": 2700,
+      "descricao": "Loja - 55m² - Excelente localização com mezanino e 01 banheiro.",
+      "imagens": [
+        "vila-cloris-loja2-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l7",
+      "tipo": "Loja",
+      "titulo": "Loja – Leblon",
+      "bairro": "Leblon",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 1,
+      "vagas": 0,
+      "area": 0,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 136,27",
+      "preco": 2130,
+      "descricao": "Loja – Vão livre + 01 banheiro.",
+      "imagens": [
+        "leblon-loja-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "l8",
+      "tipo": "Loja",
+      "titulo": "Loja – Planalto (25m²)",
+      "bairro": "Planalto",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 0,
+      "banheiros": 1,
+      "vagas": 0,
+      "area": 25,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "R$ 120,00",
+      "preco": 1300,
+      "descricao": "Loja - 25m², com 01 banheiro privativo, ideal para negócios versáteis. Localização privilegiada em área de grande movimento, garantindo visibilidade e acessibilidade.",
+      "imagens": [
+        "planalto-loja-1.jpg"
+      ],
+      "destaque": false
+    }
+  ],
+  "venda": [
+    {
+      "id": "v1",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento – Planalto",
+      "bairro": "Planalto",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 3,
+      "banheiros": 3,
+      "vagas": 1,
+      "area": null,
+      "elevador": true,
+      "condominio": "~R$ 650,00",
+      "iptu": "R$ 311,00",
+      "preco": 600000,
+      "descricao": "Apartamento - 03 quartos com armários, suíte com box e armário, sala, varandas, cozinha com armário, banheiro social com box e armário, banheiro área de serviço, área de serviço, 01 vaga de garagem coberta. Prédio com elevador.",
+      "imagens": [
+        "planalto-venda-1.jpg"
+      ],
+      "destaque": true
+    },
+    {
+      "id": "v2",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento – São João Batista",
+      "bairro": "São João Batista",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 2,
+      "banheiros": 1,
+      "vagas": 1,
+      "area": null,
+      "elevador": false,
+      "condominio": "R$ 364,00 + água",
+      "iptu": "R$ 108,00",
+      "preco": 240000,
+      "descricao": "Apartamento - 02 quartos, sala, cozinha com armário, banheiro social com box, área de serviço, 01 vaga. Prédio com porteiro.",
+      "imagens": [
+        "sao-joao-batista-venda-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "v3",
+      "tipo": "Apartamento",
+      "titulo": "Apartamento – Santa Mônica",
+      "bairro": "Santa Mônica",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 2,
+      "banheiros": 1,
+      "vagas": 1,
+      "area": null,
+      "elevador": false,
+      "condominio": "R$ 400,00",
+      "iptu": "R$ 41,21",
+      "preco": 200000,
+      "descricao": "Apartamento - 02 quartos com armários planejados, sala, cozinha com armários planejados, banheiro social com box e armário, área de serviço, 01 vaga de estacionamento.",
+      "imagens": [
+        "santa-monica-venda-1.jpg"
+      ],
+      "destaque": false
+    },
+    {
+      "id": "v4",
+      "tipo": "Casa Geminada",
+      "titulo": "Casa Geminada – Vila Clóris",
+      "bairro": "Vila Clóris",
+      "cidade": "Belo Horizonte - MG",
+      "quartos": 2,
+      "banheiros": 1,
+      "vagas": 0,
+      "area": null,
+      "elevador": false,
+      "condominio": "",
+      "iptu": "",
+      "preco": 140000,
+      "descricao": "Casa Geminada – 02 quartos, sala, cozinha, banheiro social, área de serviço, sem vaga.",
+      "imagens": [
+        "vila-cloris-casa-1.jpg"
+      ],
+      "destaque": false
+    }
+  ]
+}

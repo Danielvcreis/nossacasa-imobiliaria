@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel Admin | Nossa Casa Imobiliária</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+:root {
+  --red:#C0392B; --red2:#a93226; --dark:#1C1C2E; --dark2:#2c2c3e;
+  --white:#fff; --g50:#f8f9fa; --g100:#f1f3f5; --g200:#e9ecef;
+  --g300:#dee2e6; --g500:#adb5bd; --g600:#6c757d; --g800:#343a40;
+  --font:'Inter',sans-serif; --radius:10px;
+  --shadow:0 2px 12px rgba(0,0,0,.08); --shadow-md:0 6px 28px rgba(0,0,0,.13);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--g50);color:var(--g800);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:var(--font)}
+
+/* ── LOGIN ──────────────────────────────────────────────── */
+#loginScreen{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:var(--white);border-radius:16px;padding:48px 40px;width:360px;text-align:center;box-shadow:var(--shadow-md)}
+.login-box img{height:64px;margin:0 auto 24px;display:block}
+.login-box h2{font-size:1.3rem;font-weight:800;color:var(--dark);margin-bottom:6px}
+.login-box p{font-size:.85rem;color:var(--g600);margin-bottom:28px}
+.login-box input{width:100%;padding:13px 16px;border:1.5px solid var(--g300);border-radius:8px;font-size:.95rem;font-family:var(--font);margin-bottom:14px;transition:border-color .2s}
+.login-box input:focus{outline:none;border-color:var(--red)}
+.login-box .btn-login{width:100%;padding:13px;background:var(--red);color:var(--white);border-radius:8px;font-weight:700;font-size:.95rem;transition:background .2s}
+.login-box .btn-login:hover{background:var(--red2)}
+#loginError{color:var(--red);font-size:.82rem;margin-top:10px;min-height:18px}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+#app{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ────────────────────────────────────────────── */
+.sidebar{width:230px;background:var(--dark);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sidebar-logo img{height:44px;filter:brightness(0) invert(1)}
+.sidebar-logo span{display:block;font-size:.65rem;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+.sidebar nav{flex:1;padding:16px 12px}
+.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 14px;border-radius:8px;font-size:.88rem;font-weight:500;color:rgba(255,255,255,.6);transition:all .2s;margin-bottom:2px}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.06)}
+.nav-item.active{color:var(--white);background:var(--red)}
+.nav-item i{width:18px;text-align:center;font-size:.9rem}
+.sidebar-footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:6px}
+.sidebar-footer a,.sidebar-footer button{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:8px;font-size:.83rem;color:rgba(255,255,255,.55);transition:all .2s;font-weight:500}
+.sidebar-footer a:hover,.sidebar-footer button:hover{color:var(--white);background:rgba(255,255,255,.06)}
+
+/* ── MAIN ───────────────────────────────────────────────── */
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--white);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200);box-shadow:var(--shadow)}
+.topbar h1{font-size:1.2rem;font-weight:800;color:var(--dark)}
+.btn-add{display:flex;align-items:center;gap:8px;padding:10px 22px;background:var(--red);color:var(--white);border-radius:8px;font-weight:600;font-size:.88rem;transition:background .2s}
+.btn-add:hover{background:var(--red2)}
+.content{padding:28px 32px;flex:1}
+
+/* ── STATS ──────────────────────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:12px;padding:22px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px}
+.stat-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.stat-icon.aluguel{background:rgba(192,57,43,.1);color:var(--red)}
+.stat-icon.lojas{background:rgba(26,107,58,.1);color:#1a6b3a}
+.stat-icon.venda{background:rgba(28,28,46,.1);color:var(--dark)}
+.stat-info strong{font-size:1.6rem;font-weight:800;color:var(--dark);display:block}
+.stat-info span{font-size:.8rem;color:var(--g600)}
+
+/* ── TABLE ──────────────────────────────────────────────── */
+.table-wrap{background:var(--white);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.table-header{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200)}
+.search-input{display:flex;align-items:center;gap:8px;padding:9px 14px;border:1.5px solid var(--g300);border-radius:8px;font-size:.85rem;color:var(--g800);width:220px;background:var(--g50)}
+.search-input input{border:none;background:none;font-size:.85rem;font-family:var(--font);color:var(--g800);width:100%}
+.search-input input:focus{outline:none}
+.search-input i{color:var(--g500)}
+table{width:100%;border-collapse:collapse}
+th{padding:12px 16px;text-align:left;font-size:.72rem;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.6px;background:var(--g50);border-bottom:1px solid var(--g200)}
+td{padding:14px 16px;border-bottom:1px solid var(--g100);font-size:.88rem;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--g50)}
+.td-thumb{width:58px;height:44px;border-radius:6px;object-fit:cover;background:var(--g200);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--g500)}
+.td-thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
+.badge.aluguel{background:rgba(192,57,43,.1);color:var(--red)}
+.badge.lojas{background:rgba(26,107,58,.1);color:#1a6b3a}
+.badge.venda{background:rgba(28,28,46,.1);color:var(--dark)}
+.badge.destaque{background:rgba(255,193,7,.15);color:#856404}
+.price{font-weight:700;color:var(--red)}
+.actions{display:flex;gap:6px}
+.btn-edit,.btn-del{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .2s}
+.btn-edit{background:rgba(28,28,46,.07);color:var(--dark)}
+.btn-edit:hover{background:var(--dark);color:var(--white)}
+.btn-del{background:rgba(192,57,43,.08);color:var(--red)}
+.btn-del:hover{background:var(--red);color:var(--white)}
+.empty{padding:60px 20px;text-align:center;color:var(--g500)}
+.empty i{font-size:2.5rem;margin-bottom:12px;display:block}
+
+/* ── MODAL ──────────────────────────────────────────────── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto;backdrop-filter:blur(3px)}
+.modal{background:var(--white);border-radius:16px;width:100%;max-width:700px;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--g200)}
+.modal-head h2{font-size:1.1rem;font-weight:800;color:var(--dark)}
+.modal-close{width:32px;height:32px;border-radius:8px;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--g600);transition:all .2s}
+.modal-close:hover{background:var(--red);color:var(--white)}
+.modal-body{padding:28px;max-height:70vh;overflow-y:auto}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:.75rem;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group select,.form-group textarea{padding:10px 14px;border:1.5px solid var(--g300);border-radius:8px;font-size:.9rem;font-family:var(--font);color:var(--g800);background:var(--white);transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--red)}
+.form-group textarea{min-height:90px;resize:vertical}
+.checkbox-row{display:flex;align-items:center;gap:10px;padding:10px 0}
+.checkbox-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--red);cursor:pointer}
+.checkbox-row label{font-size:.9rem;font-weight:500;color:var(--g800);cursor:pointer;text-transform:none;letter-spacing:0}
+
+/* ── IMAGE UPLOAD ────────────────────────────────────────── */
+.upload-section{margin-top:6px}
+.upload-zone{border:2px dashed var(--g300);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--g50)}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--red);background:rgba(192,57,43,.04)}
+.upload-zone i{font-size:2rem;color:var(--g500);margin-bottom:8px;display:block}
+.upload-zone p{font-size:.85rem;color:var(--g600)}
+.upload-zone span{font-size:.75rem;color:var(--g500)}
+#uploadInput{display:none}
+.img-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:14px}
+.img-preview{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;border:1.5px solid var(--g200)}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.img-preview .img-del{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.7);color:var(--white);font-size:.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.img-preview .img-del:hover{background:var(--red)}
+.img-preview .img-cover{position:absolute;bottom:4px;left:4px;font-size:.6rem;font-weight:700;background:var(--red);color:var(--white);padding:2px 6px;border-radius:4px}
+.uploading-indicator{display:flex;align-items:center;gap:8px;padding:10px;font-size:.82rem;color:var(--g600)}
+.uploading-indicator .spinner{width:16px;height:16px;border:2px solid var(--g300);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.modal-foot{padding:20px 28px;border-top:1px solid var(--g200);display:flex;justify-content:flex-end;gap:12px}
+.btn-cancel{padding:10px 22px;border-radius:8px;font-weight:600;font-size:.88rem;color:var(--g600);background:var(--g100);transition:background .2s}
+.btn-cancel:hover{background:var(--g200)}
+.btn-save{padding:10px 28px;border-radius:8px;font-weight:700;font-size:.88rem;background:var(--red);color:var(--white);display:flex;align-items:center;gap:8px;transition:background .2s}
+.btn-save:hover{background:var(--red2)}
+.btn-save:disabled{opacity:.6;cursor:not-allowed}
+
+/* ── CONFIRM ────────────────────────────────────────────── */
+.confirm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.confirm-box{background:var(--white);border-radius:14px;padding:32px;width:360px;text-align:center;box-shadow:var(--shadow-md)}
+.confirm-box i{font-size:2.5rem;color:var(--red);margin-bottom:14px;display:block}
+.confirm-box h3{font-size:1.1rem;font-weight:800;color:var(--dark);margin-bottom:8px}
+.confirm-box p{font-size:.88rem;color:var(--g600);margin-bottom:24px}
+.confirm-actions{display:flex;gap:10px;justify-content:center}
+
+/* ── TOASTS ─────────────────────────────────────────────── */
+#toasts{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;box-shadow:var(--shadow-md);font-size:.87rem;font-weight:500;min-width:260px;animation:slideIn .3s ease;color:var(--white)}
+.toast.success{background:#1e7e34}
+.toast.error{background:var(--red)}
+.toast.info{background:var(--dark)}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img src="../images/logo.png" alt="Logo" onerror="this.style.display='none'" />
+    <h2>Painel Administrativo</h2>
+    <p>Nossa Casa Imobiliária</p>
+    <input type="password" id="loginPass" placeholder="Digite a senha" onkeydown="if(event.key==='Enter')doLogin()" autofocus />
+    <button class="btn-login" onclick="doLogin()">Entrar <i class="fas fa-arrow-right"></i></button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.png" alt="Logo" onerror="this.style.display='none'" />
+      <span>Área Administrativa</span>
+    </div>
+    <nav>
+      <button class="nav-item" data-cat="dashboard" onclick="setPage('dashboard')">
+        <i class="fas fa-chart-bar"></i> Dashboard
+      </button>
+      <button class="nav-item" data-cat="aluguel" onclick="setPage('aluguel')">
+        <i class="fas fa-key"></i> Aluguel
+      </button>
+      <button class="nav-item" data-cat="lojas" onclick="setPage('lojas')">
+        <i class="fas fa-store"></i> Lojas
+      </button>
+      <button class="nav-item" data-cat="venda" onclick="setPage('venda')">
+        <i class="fas fa-home"></i> Venda
+      </button>
+      <button class="nav-item" data-cat="banner" onclick="setPage('banner')">
+        <i class="fas fa-image"></i> Banner do Site
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> Ver o Site</a>
+      <button onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 id="pageTitle">Dashboard</h1>
+      <button class="btn-add" id="btnAdd" onclick="openForm()" style="display:none">
+        <i class="fas fa-plus"></i> Adicionar Imóvel
+      </button>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- MODAL FORM -->
+<div class="modal-backdrop" id="modal" style="display:none" onclick="onBackdropClick(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-head">
+      <h2 id="modalTitle">Adicionar Imóvel</h2>
+      <button class="modal-close" onclick="closeForm()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Categoria *</label>
+          <select id="fCat">
+            <option value="aluguel">Aluguel Residencial</option>
+            <option value="lojas">Aluguel de Lojas</option>
+            <option value="venda">Venda</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tipo de Imóvel *</label>
+          <select id="fTipo">
+            <option>Apartamento</option>
+            <option>Área Privativa</option>
+            <option>Casa</option>
+            <option>Casa Geminada</option>
+            <option>Cobertura</option>
+            <option>Galpão</option>
+            <option>Loja</option>
+            <option>Prédio/Galeria</option>
+            <option>Sala Comercial</option>
+            <option>Terreno</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Título do Imóvel *</label>
+          <input type="text" id="fTitulo" placeholder="Ex: Apartamento – Buritis" />
+        </div>
+        <div class="form-group">
+          <label>Bairro *</label>
+          <input type="text" id="fBairro" placeholder="Ex: Pampulha" />
+        </div>
+        <div class="form-group">
+          <label>Cidade</label>
+          <input type="text" id="fCidade" placeholder="Belo Horizonte - MG" value="Belo Horizonte - MG" />
+        </div>
+        <div class="form-group">
+          <label>Preço (R$) *</label>
+          <input type="number" id="fPreco" placeholder="Ex: 1500" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Área (m²)</label>
+          <input type="number" id="fArea" placeholder="Ex: 85" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Quartos</label>
+          <input type="number" id="fQuartos" placeholder="0" min="0" max="20" />
+        </div>
+        <div class="form-group">
+          <label>Banheiros</label>
+          <input type="number" id="fBanheiros" placeholder="0" min="0" max="20" />
+        </div>
+        <div class="form-group">
+          <label>Vagas de Garagem</label>
+          <input type="number" id="fVagas" placeholder="0" min="0" max="20" />
+        </div>
+        <div class="form-group">
+          <label>Condomínio</label>
+          <input type="text" id="fCond" placeholder="Ex: R$ 350,00" />
+        </div>
+        <div class="form-group">
+          <label>IPTU</label>
+          <input type="text" id="fIptu" placeholder="Ex: R$ 120,00" />
+        </div>
+        <div class="form-group full">
+          <div class="checkbox-row">
+            <input type="checkbox" id="fElevador" />
+            <label for="fElevador">Prédio com Elevador</label>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="fDestaque" />
+            <label for="fDestaque">Destacar na página inicial</label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Descrição</label>
+          <textarea id="fDesc" placeholder="Descreva o imóvel com detalhes..."></textarea>
+        </div>
+        <div class="form-group full upload-section">
+          <label>Fotos do Imóvel</label>
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('uploadInput').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p><strong>Clique para adicionar fotos</strong></p>
+            <span>ou arraste as imagens aqui · JPG, PNG até 15MB</span>
+          </div>
+          <input type="file" id="uploadInput" accept="image/*" multiple onchange="onFileSelect(event)" />
+          <div id="uploadingIndicator" style="display:none" class="uploading-indicator">
+            <div class="spinner"></div> Enviando fotos...
+          </div>
+          <div class="img-preview-grid" id="previewGrid"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeForm()">Cancelar</button>
+      <button class="btn-save" id="btnSave" onclick="saveProperty()">
+        <i class="fas fa-save"></i> Salvar Imóvel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-backdrop" id="confirmBox" style="display:none">
+  <div class="confirm-box">
+    <i class="fas fa-trash-alt"></i>
+    <h3>Excluir Imóvel?</h3>
+    <p>Esta ação não pode ser desfeita. O imóvel será removido permanentemente.</p>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-save" id="confirmOk">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toasts"></div>
+
+<script>
+// ── Estado ───────────────────────────────────────────────────
+let token       = sessionStorage.getItem('adminToken') || '';
+let properties  = { aluguel:[], lojas:[], venda:[] };
+let currentPage = 'dashboard';
+let editingId   = null;
+let editingCat  = null;
+let pendingImgs = [];   // filenames já enviados (novo ou editando)
+let searchTerm  = '';
+
+// ── Init ─────────────────────────────────────────────────────
+(async function init() {
+  if (token) {
+    // Valida token fazendo uma chamada autenticada
+    const r = await fetch('/api/properties');
+    if (r.ok) {
+      properties = await r.json();
+      showApp();
+      setPage('dashboard');
+      return;
+    }
+  }
+  showLogin();
+})();
+
+// ── Auth ─────────────────────────────────────────────────────
+async function doLogin() {
+  const pw  = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  if (!pw) { err.textContent = 'Digite a senha.'; return; }
+  err.textContent = '';
+  try {
+    const r = await fetch('/api/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pw })
+    });
+    const d = await r.json();
+    if (!r.ok) { err.textContent = d.error || 'Senha incorreta.'; return; }
+    token = d.token;
+    sessionStorage.setItem('adminToken', token);
+    properties = await (await fetch('/api/properties')).json();
+    showApp();
+    setPage('dashboard');
+  } catch { err.textContent = 'Erro de conexão. Servidor rodando?'; }
+}
+
+async function doLogout() {
+  await apiFetch('/api/logout','POST');
+  token = '';
+  sessionStorage.removeItem('adminToken');
+  location.reload();
+}
+
+function showLogin() { document.getElementById('loginScreen').style.display='flex'; }
+function showApp()   {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+}
+
+// ── Navegação ────────────────────────────────────────────────
+function setPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.cat===page));
+  const titles = { dashboard:'Dashboard', aluguel:'Aluguel Residencial', lojas:'Aluguel de Lojas', venda:'Imóveis à Venda', banner:'Banner Principal' };
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+  document.getElementById('btnAdd').style.display = (page==='dashboard' || page==='banner') ? 'none' : '';
+  if (page==='dashboard') renderDashboard();
+  else if (page==='banner') renderBanner();
+  else renderTable(page);
+}
+
+// ── Dashboard ────────────────────────────────────────────────
+function renderDashboard() {
+  const tot = (k) => (properties[k]||[]).length;
+  document.getElementById('content').innerHTML = `
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-icon aluguel"><i class="fas fa-key"></i></div>
+        <div class="stat-info"><strong>${tot('aluguel')}</strong><span>Imóveis para Aluguel</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon lojas"><i class="fas fa-store"></i></div>
+        <div class="stat-info"><strong>${tot('lojas')}</strong><span>Lojas / Comercial</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon venda"><i class="fas fa-home"></i></div>
+        <div class="stat-info"><strong>${tot('venda')}</strong><span>Imóveis à Venda</span></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div style="padding:24px 20px">
+        <p style="font-size:.9rem;color:var(--g600)">Bem-vindo ao painel administrativo. Use o menu lateral para gerenciar os imóveis, adicionar fotos e atualizar valores.</p>
+        <p style="font-size:.9rem;color:var(--g600);margin-top:8px">Total geral: <strong>${tot('aluguel')+tot('lojas')+tot('venda')} imóveis</strong> cadastrados.</p>
+      </div>
+    </div>`;
+}
+
+// ── Tabela ───────────────────────────────────────────────────
+function renderTable(cat) {
+  const list = (properties[cat]||[]).filter(p =>
+    !searchTerm || (p.titulo+p.bairro).toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  document.getElementById('content').innerHTML = `
+    <div class="table-wrap">
+      <div class="table-header">
+        <span style="font-size:.85rem;color:var(--g600)">${list.length} imóvel${list.length!==1?'s':''}</span>
+        <div class="search-input">
+          <i class="fas fa-search"></i>
+          <input placeholder="Buscar..." oninput="onSearch(this.value)" value="${searchTerm}" />
+        </div>
+      </div>
+      ${list.length===0 ? `<div class="empty"><i class="fas fa-home"></i><p>Nenhum imóvel cadastrado ainda.</p></div>` : `
+      <table>
+        <thead>
+          <tr>
+            <th style="width:70px">Foto</th>
+            <th>Imóvel</th>
+            <th>Bairro</th>
+            <th>Preço</th>
+            <th>Detalhes</th>
+            <th>Fotos</th>
+            <th style="width:90px">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(p => `
+          <tr>
+            <td>
+              <div class="td-thumb">
+                ${p.imagens?.[0]
+                  ? `<img src="/images/${p.imagens[0]}" alt="" onerror="this.parentElement.innerHTML='🏠'">`
+                  : '🏠'}
+              </div>
+            </td>
+            <td>
+              <strong style="display:block;font-size:.88rem">${esc(p.titulo)}</strong>
+              <span style="font-size:.75rem;color:var(--g600)">${esc(p.tipo)}</span>
+              ${p.destaque?'<span class="badge destaque" style="margin-left:6px">Destaque</span>':''}
+            </td>
+            <td style="font-size:.85rem">${esc(p.bairro)}</td>
+            <td class="price">${fmtPreco(p.preco, cat)}</td>
+            <td style="font-size:.8rem;color:var(--g600)">
+              ${p.quartos?`<span><i class="fas fa-bed" style="color:var(--red);margin-right:3px"></i>${p.quartos}</span>&nbsp;`:''}
+              ${p.banheiros?`<span><i class="fas fa-bath" style="color:var(--red);margin-right:3px"></i>${p.banheiros}</span>&nbsp;`:''}
+              ${p.vagas?`<span><i class="fas fa-car" style="color:var(--red);margin-right:3px"></i>${p.vagas}</span>`:'-'}
+            </td>
+            <td style="font-size:.82rem;color:var(--g600)">${(p.imagens||[]).length} foto${(p.imagens||[]).length!==1?'s':''}</td>
+            <td>
+              <div class="actions">
+                <button class="btn-edit" onclick="openForm('${cat}','${p.id}')" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+                <button class="btn-del"  onclick="askDelete('${cat}','${p.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`}
+    </div>`;
+}
+
+function onSearch(v) { searchTerm=v; renderTable(currentPage); }
+
+// ── Abrir formulário ─────────────────────────────────────────
+function openForm(cat, id) {
+  editingId  = id   || null;
+  editingCat = cat  || currentPage;
+  pendingImgs = [];
+
+  document.getElementById('modalTitle').textContent = id ? 'Editar Imóvel' : 'Adicionar Imóvel';
+  document.getElementById('previewGrid').innerHTML = '';
+  document.getElementById('uploadingIndicator').style.display='none';
+
+  if (id) {
+    const p = (properties[editingCat]||[]).find(x=>x.id===id);
+    if (!p) return;
+    V('fCat',    editingCat);
+    V('fTipo',   p.tipo);
+    V('fTitulo', p.titulo);
+    V('fBairro', p.bairro);
+    V('fCidade', p.cidade);
+    V('fPreco',  p.preco);
+    V('fArea',   p.area||'');
+    V('fQuartos',  p.quartos||'');
+    V('fBanheiros',p.banheiros||'');
+    V('fVagas',    p.vagas||'');
+    V('fCond',   p.condominio||'');
+    V('fIptu',   p.iptu||'');
+    V('fDesc',   p.descricao||'');
+    document.getElementById('fElevador').checked = !!p.elevador;
+    document.getElementById('fDestaque').checked = !!p.destaque;
+    pendingImgs = [...(p.imagens||[])];
+    renderPreviews();
+  } else {
+    // Reset form
+    ['fTitulo','fBairro','fPreco','fArea','fQuartos','fBanheiros','fVagas','fCond','fIptu','fDesc'].forEach(id=>V(id,''));
+    V('fCidade','Belo Horizonte - MG');
+    V('fCat', editingCat);
+    document.getElementById('fElevador').checked=false;
+    document.getElementById('fDestaque').checked=false;
+  }
+
+  document.getElementById('modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function closeForm() {
+  document.getElementById('modal').style.display='none';
+  document.body.style.overflow='';
+}
+function onBackdropClick(e) { if(e.target===document.getElementById('modal')) closeForm(); }
+
+// ── Salvar ───────────────────────────────────────────────────
+async function saveProperty() {
+  const titulo = G('fTitulo').trim();
+  const bairro = G('fBairro').trim();
+  const preco  = parseFloat(G('fPreco'));
+  if (!titulo||!bairro||!preco) { toast('Preencha Título, Bairro e Preço.','error'); return; }
+
+  const cat = G('fCat');
+  const payload = {
+    category: cat,
+    tipo:      G('fTipo'),
+    titulo,
+    bairro,
+    cidade:    G('fCidade')||'Belo Horizonte - MG',
+    preco,
+    area:      parseFloat(G('fArea'))||null,
+    quartos:   parseInt(G('fQuartos'))||0,
+    banheiros: parseInt(G('fBanheiros'))||0,
+    vagas:     parseInt(G('fVagas'))||0,
+    condominio:G('fCond'),
+    iptu:      G('fIptu'),
+    descricao: G('fDesc'),
+    elevador:  document.getElementById('fElevador').checked,
+    destaque:  document.getElementById('fDestaque').checked,
+    imagens:   pendingImgs
+  };
+
+  const btn = document.getElementById('btnSave');
+  btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite"></div> Salvando...';
+
+  try {
+    let r;
+    if (editingId) {
+      r = await apiFetch(`/api/properties/${editingCat}/${editingId}`,'PUT',payload);
+    } else {
+      r = await apiFetch('/api/properties','POST',payload);
+    }
+    if (!r.ok) { const d=await r.json(); toast(d.error||'Erro ao salvar.','error'); return; }
+
+    properties = await (await fetch('/api/properties')).json();
+    closeForm();
+    renderTable(cat !== currentPage ? cat : currentPage);
+    if(cat!==currentPage) setPage(cat);
+    toast(editingId?'Imóvel atualizado!':'Imóvel adicionado!','success');
+  } catch(e) { toast('Erro de conexão.','error'); }
+  finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-save"></i> Salvar Imóvel'; }
+}
+
+// ── Delete ───────────────────────────────────────────────────
+let pendingDelete = null;
+function askDelete(cat, id) {
+  pendingDelete = {cat, id};
+  document.getElementById('confirmBox').style.display='flex';
+  document.getElementById('confirmOk').onclick = async () => {
+    closeConfirm();
+    const r = await apiFetch(`/api/properties/${cat}/${id}`,'DELETE');
+    if (r.ok) {
+      properties = await (await fetch('/api/properties')).json();
+      renderTable(currentPage);
+      if (currentPage==='dashboard') renderDashboard();
+      toast('Imóvel excluído.','info');
+    } else { toast('Erro ao excluir.','error'); }
+  };
+}
+function closeConfirm() {
+  document.getElementById('confirmBox').style.display='none';
+  pendingDelete=null;
+}
+
+// ── Upload de imagens ────────────────────────────────────────
+function onDragOver(e)  { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e)      { e.preventDefault(); onDragLeave(e); handleFiles(e.dataTransfer.files); }
+function onFileSelect(e){ handleFiles(e.target.files); e.target.value=''; }
+
+async function handleFiles(files) {
+  if (!files?.length) return;
+  const ind = document.getElementById('uploadingIndicator');
+  ind.style.display='flex';
+
+  const fd = new FormData();
+  Array.from(files).forEach(f => fd.append('imagens', f));
+
+  try {
+    const r = await fetch('/api/upload', { method:'POST', headers:{'x-admin-token':token}, body:fd });
+    const d = await r.json();
+    if (!r.ok) { toast(d.error||'Erro no upload.','error'); return; }
+    pendingImgs.push(...d.filenames);
+    renderPreviews();
+    toast(`${d.filenames.length} foto${d.filenames.length!==1?'s':''} adicionada${d.filenames.length!==1?'s':''}!`,'success');
+  } catch { toast('Erro ao enviar imagens.','error'); }
+  finally { ind.style.display='none'; }
+}
+
+function renderPreviews() {
+  const grid = document.getElementById('previewGrid');
+  grid.innerHTML = pendingImgs.map((fn,i) => `
+    <div class="img-preview">
+      <img src="/images/${fn}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2280%22><rect fill=%22%23eee%22 width=%22100%22 height=%2280%22/><text x=%2250%22 y=%2245%22 text-anchor=%22middle%22 font-size=%2224%22>📷</text></svg>'" />
+      ${i===0?'<span class="img-cover">CAPA</span>':''}
+      <button class="img-del" onclick="removeImg(${i})" title="Remover"><i class="fas fa-times"></i></button>
+    </div>`).join('');
+}
+
+function removeImg(i) {
+  pendingImgs.splice(i, 1);
+  renderPreviews();
+}
+
+// ── Banner do Site ───────────────────────────────────────────
+async function renderBanner() {
+  let currentBanner = 'nossacasa.png';
+  try {
+    const r = await fetch('/api/config');
+    const cfg = await r.json();
+    if (cfg.banner) currentBanner = cfg.banner;
+  } catch {}
+
+  document.getElementById('content').innerHTML = `
+    <div class="table-wrap" style="max-width:720px">
+      <div style="padding:28px">
+        <p style="font-size:.85rem;color:var(--g600);margin-bottom:20px">
+          Troque a foto principal que aparece no topo da página inicial do site.
+        </p>
+        <img id="bannerPreview" src="/images/${currentBanner}" alt="Banner atual"
+          style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;border:1.5px solid var(--g200);display:block;margin-bottom:20px"
+          onerror="this.style.display='none'" />
+        <div class="upload-zone" id="bannerZone"
+          onclick="document.getElementById('bannerInput').click()"
+          ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onBannerDrop(event)">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p><strong>Clique para trocar o banner</strong></p>
+          <span>ou arraste uma imagem aqui · JPG, PNG até 15MB</span>
+        </div>
+        <input type="file" id="bannerInput" accept="image/*" onchange="uploadBanner(event)" style="display:none" />
+        <div id="bannerUploading" style="display:none" class="uploading-indicator">
+          <div class="spinner"></div> Enviando banner...
+        </div>
+      </div>
+    </div>`;
+}
+
+function onBannerDrop(e) { e.preventDefault(); onDragLeave(e); uploadBannerFiles(e.dataTransfer.files); }
+function uploadBanner(e) { uploadBannerFiles(e.target.files); e.target.value=''; }
+
+async function uploadBannerFiles(files) {
+  if (!files?.length) return;
+  document.getElementById('bannerUploading').style.display='flex';
+  const fd = new FormData();
+  fd.append('banner', files[0]);
+  try {
+    const r = await fetch('/api/banner', { method:'POST', headers:{'x-admin-token':token}, body:fd });
+    const d = await r.json();
+    if (!r.ok) { toast(d.error||'Erro ao enviar.','error'); return; }
+    const prev = document.getElementById('bannerPreview');
+    prev.src = '/images/' + d.filename + '?_=' + Date.now();
+    prev.style.display = 'block';
+    toast('Banner atualizado com sucesso!','success');
+  } catch { toast('Erro de conexão.','error'); }
+  finally { document.getElementById('bannerUploading').style.display='none'; }
+}
+
+// ── Helpers ──────────────────────────────────────────────────
+function G(id)     { return document.getElementById(id)?.value||''; }
+function V(id,val) { const el=document.getElementById(id); if(el) el.value=val; }
+function esc(s)    { return String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+function fmtPreco(v, cat) {
+  const n = parseFloat(v)||0;
+  const f = n.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:0,maximumFractionDigits:0});
+  return cat==='venda' ? f : f+'/mês';
+}
+
+async function apiFetch(url, method='GET', body) {
+  return fetch(url, {
+    method,
+    headers: { 'Content-Type':'application/json', 'x-admin-token': token },
+    body: body ? JSON.stringify(body) : undefined
+  });
+}
+
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i> ${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+</script>
+</body>
+</html>

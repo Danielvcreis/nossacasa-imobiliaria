@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Pichau\\\\OneDrive\\\\Documentos\\\\nossacasaimobiliaria\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object @{N='Arquivo';E={$_.FullName.Replace\\('c:\\\\Users\\\\Pichau\\\\OneDrive\\\\Documentos\\\\nossacasaimobiliaria\\\\',''\\)}} | Format-Table -AutoSize)",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\Pichau\\\\OneDrive\\\\Documentos\\\\nossacasaimobiliaria\\\\data\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\Pichau\\\\OneDrive\\\\Documentos\\\\nossacasaimobiliaria\\\\admin\")",
+      "PowerShell(cd \"c:\\\\Users\\\\Pichau\\\\OneDrive\\\\Documentos\\\\nossacasaimobiliaria\"; $job = Start-Job { node \"c:\\\\Users\\\\Pichau\\\\OneDrive\\\\Documentos\\\\nossacasaimobiliaria\\\\server.js\" }; Start-Sleep -Seconds 3; $out = Receive-Job $job; Stop-Job $job; Remove-Job $job; $out)",
+      "PowerShell(Start-Process \"http://localhost:3000\")",
+      "PowerShell(Start-Process \"http://localhost:3000/admin\")",
+      "Bash(Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object State, OwningProcess)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue)",
+      "PowerShell(Test-NetConnection -ComputerName localhost -Port 3000 -InformationLevel Quiet)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force -ErrorAction SilentlyContinue)"
+    ]
+  }
+}

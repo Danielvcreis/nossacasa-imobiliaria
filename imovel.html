@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">Imóvel | Nossa Casa Imobiliária</title>
+  <meta name="description" content="Nossa Casa Imobiliária – CRECI: PJ 3.215" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── Breadcrumb ─────────────────────────────── */
+    .breadcrumb { padding: 18px 0 0; font-size: .83rem; color: var(--gray-600); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .breadcrumb a { color: var(--gray-600); transition: color .2s; }
+    .breadcrumb a:hover { color: var(--red); }
+    .breadcrumb i { font-size: .65rem; }
+
+    /* ── Detail section ─────────────────────────── */
+    .detail-section { padding: 24px 0 80px; }
+    .detail-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; }
+
+    /* ── Gallery ────────────────────────────────── */
+    .gallery { position: sticky; top: 90px; }
+    .gallery-main {
+      width: 100%; aspect-ratio: 4/3;
+      border-radius: 14px; overflow: hidden;
+      background: var(--gray-200); position: relative;
+      box-shadow: 0 4px 24px rgba(0,0,0,.1);
+    }
+    .gallery-main img { width:100%; height:100%; object-fit:cover; transition: opacity .3s; }
+    .gallery-main .no-img { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--gray-500); font-size:3.5rem; }
+    .gallery-counter { position:absolute; bottom:12px; right:14px; background:rgba(0,0,0,.55); color:#fff; font-size:.75rem; font-weight:600; padding:4px 12px; border-radius:20px; backdrop-filter:blur(4px); }
+    .gallery-nav { position:absolute; top:50%; transform:translateY(-50%); width:36px; height:36px; background:rgba(255,255,255,.9); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.9rem; color:var(--dark); box-shadow:0 2px 8px rgba(0,0,0,.15); cursor:pointer; transition:all .2s; border:none; }
+    .gallery-nav:hover { background:var(--red); color:#fff; }
+    .gallery-nav.prev { left:12px; }
+    .gallery-nav.next { right:12px; }
+    .gallery-thumbs { display:flex; gap:8px; margin-top:10px; overflow-x:auto; padding-bottom:4px; }
+    .gallery-thumbs::-webkit-scrollbar { height:4px; }
+    .gallery-thumbs::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:2px; }
+    .gallery-thumb { width:80px; height:60px; flex-shrink:0; border-radius:8px; overflow:hidden; cursor:pointer; border:2.5px solid transparent; transition:border-color .2s; }
+    .gallery-thumb.active { border-color:var(--red); }
+    .gallery-thumb img { width:100%; height:100%; object-fit:cover; }
+
+    /* ── Info panel ─────────────────────────────── */
+    .detail-info { display:flex; flex-direction:column; gap:0; }
+    .detail-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:20px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:14px; width:fit-content; }
+    .detail-badge.aluguel { background:var(--red); color:#fff; }
+    .detail-badge.venda   { background:var(--dark); color:#fff; }
+    .detail-badge.lojas   { background:#1a6b3a; color:#fff; }
+    .detail-title { font-size:clamp(1.4rem,3vw,2rem); font-weight:800; color:var(--dark); line-height:1.2; margin-bottom:8px; }
+    .detail-location { display:flex; align-items:center; gap:7px; font-size:.92rem; color:var(--gray-600); margin-bottom:24px; }
+    .detail-location i { color:var(--red); }
+
+    .detail-features { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:24px; }
+    .detail-feat { display:flex; align-items:center; gap:10px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:10px; padding:12px 14px; }
+    .detail-feat i { font-size:1.1rem; color:var(--red); width:22px; text-align:center; }
+    .detail-feat div strong { display:block; font-size:.92rem; font-weight:700; color:var(--dark); }
+    .detail-feat div span  { font-size:.75rem; color:var(--gray-600); }
+
+    .detail-price-box { background:linear-gradient(135deg,rgba(192,57,43,.06),rgba(192,57,43,.02)); border:1.5px solid rgba(192,57,43,.15); border-radius:12px; padding:18px 20px; margin-bottom:20px; }
+    .detail-price { font-size:1.9rem; font-weight:800; color:var(--red); line-height:1; }
+    .detail-price span { font-size:1rem; font-weight:500; color:var(--gray-600); }
+    .detail-cond { display:flex; gap:20px; margin-top:8px; font-size:.82rem; color:var(--gray-600); flex-wrap:wrap; }
+    .detail-cond span { display:flex; align-items:center; gap:5px; }
+    .detail-cond i { color:var(--red); font-size:.7rem; }
+
+    .detail-obs { font-size:.78rem; color:var(--gray-500); font-style:italic; margin-top:8px; }
+
+    .detail-desc-box { margin-bottom:24px; }
+    .detail-desc-box h3 { font-size:.88rem; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; }
+    .detail-desc-box p { font-size:.93rem; color:var(--gray-700, #495057); line-height:1.75; }
+
+    .detail-cta { display:flex; flex-direction:column; gap:10px; }
+    .btn-whatsapp { display:flex; align-items:center; justify-content:center; gap:10px; padding:15px; background:#25D366; color:#fff; border-radius:10px; font-weight:700; font-size:1rem; transition:background .2s; }
+    .btn-whatsapp:hover { background:#1ebe5d; }
+    .btn-whatsapp i { font-size:1.2rem; }
+    .btn-phone { display:flex; align-items:center; justify-content:center; gap:10px; padding:13px; background:var(--dark); color:#fff; border-radius:10px; font-weight:600; font-size:.9rem; transition:background .2s; }
+    .btn-phone:hover { background:var(--dark-hover, #2c2c3e); }
+
+    /* ── Loading skeleton ───────────────────────── */
+    .skeleton { background:linear-gradient(90deg,var(--gray-200) 25%,var(--gray-100) 50%,var(--gray-200) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:8px; }
+    @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+
+    /* ── Back link ──────────────────────────────── */
+    .back-link { display:inline-flex; align-items:center; gap:7px; font-size:.85rem; font-weight:600; color:var(--gray-600); margin-bottom:16px; transition:color .2s; }
+    .back-link:hover { color:var(--red); }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width:900px) {
+      .detail-grid { grid-template-columns:1fr; gap:28px; }
+      .gallery { position:static; }
+    }
+    @media (max-width:540px) {
+      .detail-features { grid-template-columns:1fr 1fr; }
+    }
+
+    /* ── prop-img-count já usado nos cards ─────── */
+    .prop-img-count { position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,.55); color:#fff; font-size:.72rem; font-weight:600; padding:3px 9px; border-radius:20px; display:flex; align-items:center; gap:5px; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner container">
+      <div class="topbar-contacts">
+        <a href="tel:3134958341"><i class="fas fa-phone"></i> (31) 3495-8341</a>
+        <a href="https://wa.me/5531994300145" target="_blank"><i class="fab fa-whatsapp"></i> (31) 3495-6078</a>
+      </div>
+      <div class="topbar-creci">CRECI: PJ 3.215</div>
+    </div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="header-inner container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img" />
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="aluguel.html" class="nav-link" id="navAluguel">Aluguel</a>
+        <a href="aluguel-lojas.html" class="nav-link" id="navLojas">Aluguel (Lojas)</a>
+        <a href="venda.html" class="nav-link" id="navVenda">Venda</a>
+        <a href="sobre.html" class="nav-link">Sobre</a>
+        <a href="contato.html" class="nav-link">Contato</a>
+      </nav>
+      <a href="contato.html" class="btn btn-primary header-cta">Fale Conosco <i class="fas fa-arrow-right"></i></a>
+      <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <section class="detail-section">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <i class="fas fa-chevron-right"></i>
+        <a href="#" id="breadCatLink">Aluguel</a>
+        <i class="fas fa-chevron-right"></i>
+        <span id="breadTitle">Carregando...</span>
+      </div>
+
+      <div style="margin-top:16px">
+        <a href="#" id="backLink" class="back-link">
+          <i class="fas fa-arrow-left"></i> Voltar para listagem
+        </a>
+      </div>
+
+      <div id="content">
+        <!-- Loading skeleton -->
+        <div class="detail-grid">
+          <div>
+            <div class="skeleton" style="aspect-ratio:4/3;border-radius:14px"></div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <div class="skeleton" style="width:80px;height:60px;border-radius:8px"></div>
+              <div class="skeleton" style="width:80px;height:60px;border-radius:8px"></div>
+              <div class="skeleton" style="width:80px;height:60px;border-radius:8px"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="skeleton" style="height:28px;width:120px;border-radius:20px"></div>
+            <div class="skeleton" style="height:40px;width:80%"></div>
+            <div class="skeleton" style="height:20px;width:50%"></div>
+            <div class="skeleton" style="height:100px"></div>
+            <div class="skeleton" style="height:80px"></div>
+            <div class="skeleton" style="height:52px;border-radius:10px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-whatsapp" style="margin-top:0">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="cta-text"><h2>Tem dúvidas sobre este imóvel?</h2><p>Fale diretamente com um de nossos especialistas agora mesmo.</p></div>
+        <a href="https://wa.me/5531994300145" target="_blank" class="btn btn-primary cta-btn">Chamar no WhatsApp <i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"><img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img logo-img-footer" /></a>
+          <p class="footer-tagline">Imóveis para aluguel e venda em Belo Horizonte e região com segurança e confiança.</p>
+          <div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="https://wa.me/5531994300145" target="_blank"><i class="fab fa-whatsapp"></i></a></div>
+        </div>
+        <div class="footer-col"><h4>Navegação</h4><ul><li><a href="index.html">Home</a></li><li><a href="aluguel.html">Aluguel</a></li><li><a href="aluguel-lojas.html">Aluguel (Lojas)</a></li><li><a href="venda.html">Venda</a></li><li><a href="sobre.html">Sobre</a></li><li><a href="contato.html">Contato</a></li></ul></div>
+        <div class="footer-col"><h4>Tipos de Imóveis</h4><ul><li><a href="#">Apartamentos</a></li><li><a href="#">Coberturas</a></li><li><a href="#">Áreas Privativas</a></li><li><a href="#">Lojas</a></li><li><a href="#">Galpões</a></li></ul></div>
+        <div class="footer-col"><h4>Contato</h4><ul class="footer-contact"><li><i class="fas fa-phone"></i><a href="tel:3134958341">(31) 3495-8341</a></li><li><i class="fab fa-whatsapp"></i><a href="https://wa.me/5531994300145" target="_blank">(31) 3495-6078</a></li><li><i class="fas fa-envelope"></i><a href="mailto:contato@nossacasaimobiliaria.com.br">contato@nossacasaimobiliaria.com.br</a></li><li><i class="fas fa-map-marker-alt"></i>Rua das Acácias, 123 – Belo Horizonte, MG</li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>© 2024 Nossa Casa Imobiliária – CRECI: PJ 3.215 – Todos os direitos reservados.</p><p class="footer-dev">Desenvolvido com <i class="fas fa-heart"></i> por <a href="#">8 digital</a></p></div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+  (async function () {
+    const params = new URLSearchParams(window.location.search);
+    const id  = params.get('id');
+    const cat = params.get('cat') || 'aluguel';
+
+    // Links de navegação
+    const catPages = { aluguel:'aluguel.html', lojas:'aluguel-lojas.html', venda:'venda.html' };
+    const catLabels = { aluguel:'Aluguel', lojas:'Aluguel (Lojas)', venda:'Venda' };
+    const catPage = catPages[cat] || 'aluguel.html';
+
+    document.getElementById('breadCatLink').href = catPage;
+    document.getElementById('breadCatLink').textContent = catLabels[cat] || 'Imóveis';
+    document.getElementById('backLink').href = catPage;
+
+    // Destaca nav
+    const navMap = { aluguel:'navAluguel', lojas:'navLojas', venda:'navVenda' };
+    const navEl = document.getElementById(navMap[cat]);
+    if (navEl) navEl.classList.add('active');
+
+    if (!id) { showError('Imóvel não encontrado.'); return; }
+
+    let prop;
+    try {
+      const data = await (await fetch('/api/properties?_=' + Date.now(), { cache: 'no-store' })).json();
+      prop = (data[cat] || []).find(p => p.id === id);
+    } catch { showError('Erro ao carregar o imóvel.'); return; }
+
+    if (!prop) { showError('Imóvel não encontrado.'); return; }
+
+    // Atualiza título da aba
+    document.getElementById('pageTitle').textContent = `${prop.titulo} | Nossa Casa Imobiliária`;
+    document.getElementById('breadTitle').textContent = prop.titulo;
+
+    // Formata preço
+    const priceFormatted = new Intl.NumberFormat('pt-BR', {
+      style:'currency', currency:'BRL', minimumFractionDigits:0, maximumFractionDigits:0
+    }).format(prop.preco || 0);
+    const priceHTML = cat === 'venda'
+      ? priceFormatted
+      : `${priceFormatted} <span>/ mês</span>`;
+
+    // Badge
+    const badgeClass = cat === 'venda' ? 'venda' : cat === 'lojas' ? 'lojas' : 'aluguel';
+    const badgeText  = cat === 'venda' ? 'Para Venda' : cat === 'lojas' ? 'Comercial' : 'Para Alugar';
+
+    // Features
+    const feats = [];
+    if (prop.quartos)   feats.push({ icon:'fa-bed',           val: prop.quartos, lbl: prop.quartos === 1 ? 'Quarto' : 'Quartos' });
+    if (prop.banheiros) feats.push({ icon:'fa-bath',          val: prop.banheiros, lbl: prop.banheiros === 1 ? 'Banheiro' : 'Banheiros' });
+    if (prop.vagas)     feats.push({ icon:'fa-car',           val: prop.vagas, lbl: prop.vagas === 1 ? 'Vaga' : 'Vagas' });
+    if (prop.area)      feats.push({ icon:'fa-vector-square', val: `${prop.area} m²`, lbl: 'Área' });
+    if (prop.elevador != null) feats.push({ icon:'fa-elevator', val: prop.elevador ? 'Sim' : 'Não', lbl: 'Elevador' });
+
+    const featsHTML = feats.map(f => `
+      <div class="detail-feat">
+        <i class="fas ${f.icon}"></i>
+        <div><strong>${f.val}</strong><span>${f.lbl}</span></div>
+      </div>`).join('');
+
+    // Cond/IPTU
+    const condParts = [];
+    if (prop.condominio) condParts.push(`<span><i class="fas fa-building"></i> Cond: ${prop.condominio}</span>`);
+    if (prop.iptu)       condParts.push(`<span><i class="fas fa-file-invoice-dollar"></i> IPTU: ${prop.iptu}</span>`);
+
+    // WhatsApp
+    const waMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel "${prop.titulo}" no bairro ${prop.bairro}. Poderia me dar mais informações?`);
+    const waLink = `https://wa.me/5531994300145?text=${waMsg}`;
+
+    // Imagens
+    const imgs = prop.imagens?.length ? prop.imagens : [];
+
+    document.getElementById('content').innerHTML = `
+      <div class="detail-grid">
+
+        <!-- GALERIA -->
+        <div class="gallery" id="gallery">
+          <div class="gallery-main" id="galleryMain">
+            ${imgs.length
+              ? `<img id="mainImg" src="/images/${imgs[0]}" alt="${prop.titulo}" />
+                 ${imgs.length > 1 ? `
+                   <button class="gallery-nav prev" onclick="changeImg(-1)"><i class="fas fa-chevron-left"></i></button>
+                   <button class="gallery-nav next" onclick="changeImg(1)"><i class="fas fa-chevron-right"></i></button>
+                   <span class="gallery-counter" id="imgCounter">1 / ${imgs.length}</span>` : ''}
+                `
+              : `<div class="no-img"><i class="fas fa-home"></i><span style="font-size:1rem;color:var(--gray-500)">Foto em breve</span></div>`
+            }
+          </div>
+          ${imgs.length > 1 ? `
+            <div class="gallery-thumbs" id="thumbs">
+              ${imgs.map((fn, i) => `
+                <div class="gallery-thumb ${i===0?'active':''}" onclick="setImg(${i})">
+                  <img src="/images/${fn}" alt="Foto ${i+1}" />
+                </div>`).join('')}
+            </div>` : ''}
+        </div>
+
+        <!-- INFO -->
+        <div class="detail-info">
+          <span class="detail-badge ${badgeClass}">${badgeText}</span>
+          <h1 class="detail-title">${prop.titulo}</h1>
+          <p class="detail-location"><i class="fas fa-map-marker-alt"></i> ${prop.bairro}, ${prop.cidade || 'Belo Horizonte - MG'}</p>
+
+          ${featsHTML ? `<div class="detail-features">${featsHTML}</div>` : ''}
+
+          <div class="detail-price-box">
+            <div class="detail-price">${priceHTML}</div>
+            ${condParts.length ? `<div class="detail-cond">${condParts.join('')}</div>` : ''}
+            <p class="detail-obs">Os valores poderão ser alterados sem aviso prévio.</p>
+          </div>
+
+          ${prop.descricao ? `
+            <div class="detail-desc-box">
+              <h3><i class="fas fa-align-left" style="margin-right:6px;color:var(--red)"></i>Descrição</h3>
+              <p>${prop.descricao}</p>
+            </div>` : ''}
+
+          <div class="detail-cta">
+            <a href="${waLink}" target="_blank" class="btn-whatsapp">
+              <i class="fab fa-whatsapp"></i> Falar sobre este imóvel
+            </a>
+            <a href="tel:3134958341" class="btn-phone">
+              <i class="fas fa-phone"></i> (31) 3495-8341
+            </a>
+          </div>
+        </div>
+
+      </div>`;
+
+    // Galeria JS
+    window._imgs = imgs;
+    window._cur  = 0;
+  })();
+
+  window.setImg = function (i) {
+    const imgs = window._imgs;
+    if (!imgs?.length) return;
+    window._cur = i;
+    document.getElementById('mainImg').src = `/images/${imgs[i]}`;
+    document.getElementById('imgCounter').textContent = `${i+1} / ${imgs.length}`;
+    document.querySelectorAll('.gallery-thumb').forEach((t,j) => t.classList.toggle('active', j===i));
+  };
+
+  window.changeImg = function (dir) {
+    const imgs = window._imgs;
+    if (!imgs?.length) return;
+    const next = (window._cur + dir + imgs.length) % imgs.length;
+    window.setImg(next);
+  };
+
+  function showError(msg) {
+    document.getElementById('content').innerHTML = `
+      <div style="text-align:center;padding:80px 20px;color:var(--gray-600)">
+        <i class="fas fa-home" style="font-size:3rem;margin-bottom:16px;display:block;color:var(--gray-400)"></i>
+        <p style="font-size:1rem">${msg}</p>
+        <a href="index.html" class="btn btn-primary" style="margin-top:20px;display:inline-flex">Voltar para o início</a>
+      </div>`;
+  }
+  </script>
+</body>
+</html>

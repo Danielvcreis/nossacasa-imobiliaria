@@ -1,0 +1,374 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nossa Casa Imobiliária | Aluguel e Venda em Belo Horizonte</title>
+  <meta name="description" content="Imóveis para aluguel e venda em Belo Horizonte e região com segurança e confiança. CRECI: PJ 3.215" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner container">
+      <div class="topbar-contacts">
+        <a href="tel:3134958341"><i class="fas fa-phone"></i> (31) 3495-8341</a>
+        <a href="https://wa.me/5531349560780" target="_blank"><i class="fab fa-whatsapp"></i> (31) 3495-6078</a>
+      </div>
+      <div class="topbar-creci">CRECI: PJ 3.215</div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="header-inner container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img" />
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="aluguel.html" class="nav-link">Aluguel</a>
+        <a href="aluguel-lojas.html" class="nav-link">Aluguel (Lojas)</a>
+        <a href="venda.html" class="nav-link">Venda</a>
+        <a href="sobre.html" class="nav-link">Sobre</a>
+        <a href="contato.html" class="nav-link">Contato</a>
+      </nav>
+
+      <a href="contato.html" class="btn btn-primary header-cta">
+        Fale Conosco <i class="fas fa-arrow-right"></i>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="images/nossacasa.png" alt="Imóvel em destaque" class="hero-img" id="heroBg" />
+      <div class="hero-blur-panel"></div>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">Encontre o imóvel<br />ideal para você!</h1>
+        <p class="hero-subtitle">Imóveis para aluguel e venda em Belo Horizonte<br />e região com segurança e confiança.</p>
+        <a href="#imoveis" class="btn btn-primary hero-btn">
+          Ver Imóveis <i class="fas fa-search"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="search-bar container">
+      <div class="search-tabs">
+        <button class="search-tab active" data-tab="aluguel">
+          <i class="fas fa-key"></i> Aluguel
+        </button>
+        <button class="search-tab" data-tab="venda">
+          <i class="fas fa-home"></i> Venda
+        </button>
+        <button class="search-tab" data-tab="lojas">
+          <i class="fas fa-store"></i> Lojas
+        </button>
+      </div>
+      <div class="search-fields">
+        <div class="search-field">
+          <label>Tipo de imóvel</label>
+          <select id="hero-tipo">
+            <option value="">Selecione</option>
+            <option value="Apartamento">Apartamento</option>
+            <option value="Área Privativa">Área Privativa</option>
+            <option value="Cobertura">Cobertura</option>
+            <option value="Casa Geminada">Casa Geminada</option>
+            <option value="Loja">Loja</option>
+            <option value="Galpão">Galpão</option>
+            <option value="Prédio/Galeria">Prédio / Galeria</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Bairro</label>
+          <select id="hero-bairro">
+            <option value="">Selecione</option>
+            <option value="Itapoã">Itapoã</option>
+            <option value="Palmares">Palmares</option>
+            <option value="Planalto">Planalto</option>
+            <option value="Santa Mônica">Santa Mônica</option>
+            <option value="Santa Rosa">Santa Rosa</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label id="hero-quartos-label">Quartos</label>
+          <select id="hero-quartos">
+            <option value="">Selecione</option>
+            <option value="2">2 quartos</option>
+            <option value="3">3 quartos</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Faixa de preço</label>
+          <select id="hero-preco">
+            <option value="">Selecione</option>
+            <option value="0-1500">Até R$ 1.500</option>
+            <option value="1500-2500">R$ 1.500 – R$ 2.500</option>
+            <option value="2500-4000">R$ 2.500 – R$ 4.000</option>
+            <option value="4000+">Acima de R$ 4.000</option>
+          </select>
+        </div>
+        <button class="btn btn-dark search-btn" id="heroBuscar" onclick="heroBuscar()">
+          <i class="fas fa-search"></i> Buscar Imóveis
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROPERTIES -->
+  <section class="featured" id="imoveis">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Imóveis em destaque</h2>
+        <a href="aluguel.html" class="section-link">Ver todos os imóveis <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="properties-grid"></div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-us">
+    <div class="container">
+      <h2 class="section-title center">Por que escolher a Nossa Casa Imobiliária?</h2>
+      <div class="why-grid">
+
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Segurança</h3>
+          <p>Transações seguras e processos transparentes.</p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Atendimento personalizado</h3>
+          <p>Entendemos sua necessidade para encontrar o imóvel ideal.</p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <h3>Experiência no mercado</h3>
+          <p>Anos de atuação em Belo Horizonte e região.</p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <h3>Confiança</h3>
+          <p>Imóveis verificados e negociações seguras.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-img-wrap">
+          <img src="images/nossacasaimbfoto.png" alt="Nossa Casa Imobiliária" class="about-img" />
+        </div>
+        <div class="about-content">
+          <h2 class="about-title">Sobre nós</h2>
+          <p class="about-text">
+            Desde 2001, a Nossa Casa Imobiliária atua com excelência na compra, venda e administração de imóveis, sendo referência em locação na região da Pampulha e oferecendo soluções seguras para proprietários e inquilinos. Nosso compromisso é com você, sempre com transparência, ética e dedicação.
+          </p>
+          <a href="sobre.html" class="btn btn-primary">Saiba mais sobre nós</a>
+        </div>
+        <div class="about-testimonial">
+          <div class="testimonial-quote">
+            <i class="fas fa-quote-left"></i>
+            <p>"Excelente atendimento! Encontraram o imóvel perfeito para minha família. Recomendo!"</p>
+            <span class="testimonial-author">— Juliana M.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHATSAPP CTA -->
+  <section class="cta-whatsapp">
+    <div class="container">
+      <div class="cta-inner">
+        <div class="cta-icon">
+          <i class="fab fa-whatsapp"></i>
+        </div>
+        <div class="cta-text">
+          <h2>Fale com um de nossos especialistas agora mesmo!</h2>
+          <p>Estamos prontos para te ajudar a encontrar o imóvel ideal.</p>
+        </div>
+        <a href="https://wa.me/5531349560780" target="_blank" class="btn btn-primary cta-btn">
+          Chamar no WhatsApp <i class="fab fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img logo-img-footer" />
+          </a>
+          <p class="footer-tagline">Imóveis para aluguel e venda em Belo Horizonte e região com segurança e confiança.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/5531349560780" aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aluguel.html">Aluguel</a></li>
+            <li><a href="aluguel-lojas.html">Aluguel (Lojas)</a></li>
+            <li><a href="venda.html">Venda</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="contato.html">Contato</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Tipos de Imóveis</h4>
+          <ul>
+            <li><a href="#">Apartamentos</a></li>
+            <li><a href="#">Casas</a></li>
+            <li><a href="#">Coberturas</a></li>
+            <li><a href="#">Lojas</a></li>
+            <li><a href="#">Salas Comerciais</a></li>
+            <li><a href="#">Terrenos</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <ul class="footer-contact">
+            <li><i class="fas fa-phone"></i> <a href="tel:3134958341">(31) 3495-8341</a></li>
+            <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5531349560780" target="_blank">(31) 3495-6078</a></li>
+            <li><i class="fas fa-envelope"></i> <a href="mailto:contato@nossacasaimobiliaria.com.br">contato@nossacasaimobiliaria.com.br</a></li>
+            <li><i class="fas fa-map-marker-alt"></i> Rua das Acácias, 123 – Belo Horizonte, MG</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2024 Nossa Casa Imobiliária – CRECI: PJ 3.215 – Todos os direitos reservados.</p>
+        <p class="footer-dev">Desenvolvido com <i class="fas fa-heart"></i> por <a href="#">8 digital</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/properties.js"></script>
+  <script>
+    // Carrega banner dinamicamente do admin
+    fetch('/api/config').then(r => r.json()).then(cfg => {
+      if (cfg.banner) {
+        const img = document.getElementById('heroBg');
+        if (img) img.src = 'images/' + cfg.banner;
+      }
+    }).catch(() => {});
+
+    // Configurações por aba
+    const heroConfig = {
+      aluguel: {
+        bairros: ['Itapoã','Palmares','Planalto','Santa Mônica','Santa Rosa'],
+        quartosLabel: 'Quartos',
+        quartosOpts: [['2','2 quartos'],['3','3 quartos']],
+        precos: [['0-1500','Até R$ 1.500'],['1500-2500','R$ 1.500 – R$ 2.500'],['2500-4000','R$ 2.500 – R$ 4.000'],['4000+','Acima de R$ 4.000']],
+        quartosKey: 'quartos',
+      },
+      venda: {
+        bairros: ['Planalto','Santa Mônica','São João Batista','Vila Clóris'],
+        quartosLabel: 'Quartos',
+        quartosOpts: [['2','2 quartos'],['3','3 quartos']],
+        precos: [['0-200000','Até R$ 200.000'],['200000-400000','R$ 200 – R$ 400 mil'],['400000-700000','R$ 400 – R$ 700 mil'],['700000+','Acima de R$ 700.000']],
+        quartosKey: 'quartos',
+      },
+      lojas: {
+        bairros: ['Buritis','Garças','Heliópolis','Leblon','Planalto','Vila Clóris'],
+        quartosLabel: 'Área (m²)',
+        quartosOpts: [['0-70','Até 70 m²'],['71-150','71 – 150 m²'],['150+','Acima de 150 m²']],
+        precos: [['0-2000','Até R$ 2.000'],['2000-4000','R$ 2.000 – R$ 4.000'],['4000-7000','R$ 4.000 – R$ 7.000'],['7000+','Acima de R$ 7.000']],
+        quartosKey: 'area',
+      },
+    };
+
+    function updateHeroTab(tab) {
+      const cfg = heroConfig[tab] || heroConfig.aluguel;
+
+      // Bairros
+      const bairroSel = document.getElementById('hero-bairro');
+      bairroSel.innerHTML = '<option value="">Selecione</option>' +
+        cfg.bairros.map(b => `<option value="${b}">${b}</option>`).join('');
+
+      // Quartos / Área
+      document.getElementById('hero-quartos-label').textContent = cfg.quartosLabel;
+      const quartosSel = document.getElementById('hero-quartos');
+      quartosSel.innerHTML = '<option value="">Selecione</option>' +
+        cfg.quartosOpts.map(([v,t]) => `<option value="${v}">${t}</option>`).join('');
+      quartosSel.dataset.key = cfg.quartosKey;
+
+      // Preço
+      const precoSel = document.getElementById('hero-preco');
+      precoSel.innerHTML = '<option value="">Selecione</option>' +
+        cfg.precos.map(([v,t]) => `<option value="${v}">${t}</option>`).join('');
+    }
+
+    // Atualiza ao trocar de aba
+    document.querySelectorAll('.search-tab').forEach(tab => {
+      tab.addEventListener('click', () => updateHeroTab(tab.dataset.tab));
+    });
+
+    function heroBuscar() {
+      const tab   = document.querySelector('.search-tab.active')?.dataset.tab || 'aluguel';
+      const pages = { aluguel: 'aluguel.html', venda: 'venda.html', lojas: 'aluguel-lojas.html' };
+      const page  = pages[tab] || 'aluguel.html';
+
+      const params = new URLSearchParams();
+      const tipo    = document.getElementById('hero-tipo').value;
+      const bairro  = document.getElementById('hero-bairro').value;
+      const quartos = document.getElementById('hero-quartos');
+      const preco   = document.getElementById('hero-preco').value;
+
+      if (tipo)           params.set('tipo',  tipo);
+      if (bairro)         params.set('bairro', bairro);
+      if (quartos.value)  params.set(quartos.dataset.key || 'quartos', quartos.value);
+      if (preco)          params.set('preco', preco);
+
+      const qs = params.toString();
+      window.location.href = page + (qs ? '?' + qs : '');
+    }
+  </script>
+</body>
+</html>
+

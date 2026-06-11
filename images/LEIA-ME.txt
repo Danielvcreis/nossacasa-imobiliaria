@@ -1,0 +1,36 @@
+PASTA DE IMAGENS – NOSSA CASA IMOBILIÁRIA
+==========================================
+
+Renomeie as imagens e coloque aqui com os nomes abaixo:
+
+HERO:
+  nossacasa.png              → Já colocada! ✓
+
+SOBRE NÓS:
+  sobre-nos.jpg
+
+ALUGUEL RESIDENCIAL:
+  palmares-1.jpg             → Área Privativa Palmares
+  santa-rosa-1.jpg           → Cobertura Santa Rosa
+  santa-monica-1.jpg         → Apartamento Santa Mônica
+  planalto-1.jpg             → Apartamento Planalto
+  itapoa-1.jpg               → Apartamento Itapoã
+
+VENDA:
+  planalto-venda-1.jpg           → Apartamento Planalto (R$ 600.000)
+  sao-joao-batista-venda-1.jpg   → Apartamento São João Batista (R$ 240.000)
+  santa-monica-venda-1.jpg       → Apartamento Santa Mônica (R$ 200.000)
+  vila-cloris-casa-1.jpg         → Casa Geminada Vila Clóris (R$ 140.000)
+
+ALUGUEL LOJAS / COMERCIAL:
+  planalto-comercial-1.jpg   → Prédio/Galeria Planalto (R$ 25.000)
+  vila-cloris-loja1-1.jpg    → Loja Vila Clóris 110m² (R$ 6.000)
+  heliopolis-loja-1.jpg      → Loja Heliópolis 100m² (R$ 5.500)
+  buritis-loja-1.jpg         → Loja Buritis 67m² (R$ 5.500)
+  garcas-galpao-1.jpg        → Galpão Garças 300m² (R$ 3.000)
+  vila-cloris-loja2-1.jpg    → Loja Vila Clóris 55m² (R$ 2.700)
+  leblon-loja-1.jpg          → Loja Leblon (R$ 2.130)
+  planalto-loja-1.jpg        → Loja Planalto 25m² (R$ 1.300)
+
+DICA: Use JPG/PNG com largura entre 800–1200px.
+Sem imagem, o site exibe ícone automático como placeholder.

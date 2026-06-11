@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contato | Nossa Casa Imobiliária</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner container">
+      <div class="topbar-contacts">
+        <a href="tel:3134958341"><i class="fas fa-phone"></i> (31) 3495-8341</a>
+        <a href="https://wa.me/5531349560780" target="_blank"><i class="fab fa-whatsapp"></i> (31) 3495-6078</a>
+      </div>
+      <div class="topbar-creci">CRECI: PJ 3.215</div>
+    </div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="header-inner container">
+      <a href="index.html" class="logo">
+        <img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img" />
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="aluguel.html" class="nav-link">Aluguel</a>
+        <a href="aluguel-lojas.html" class="nav-link">Aluguel (Lojas)</a>
+        <a href="venda.html" class="nav-link">Venda</a>
+        <a href="sobre.html" class="nav-link">Sobre</a>
+        <a href="contato.html" class="nav-link active">Contato</a>
+      </nav>
+      <a href="contato.html" class="btn btn-primary header-cta">Fale Conosco <i class="fas fa-arrow-right"></i></a>
+      <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <section class="page-hero page-hero-sm">
+    <div class="page-hero-overlay"></div>
+    <div class="container page-hero-content">
+      <h1>Entre em Contato</h1>
+      <p>Estamos prontos para te ajudar a encontrar o imóvel ideal.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <h2>Fale com a Nossa Casa</h2>
+          <p>Nossa equipe de especialistas está pronta para atender você. Entre em contato por telefone, WhatsApp, e-mail ou preencha o formulário.</p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+              <div class="contact-item-text"><strong>Telefone</strong><a href="tel:3134958341">(31) 3495-8341</a></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon"><i class="fab fa-whatsapp"></i></div>
+              <div class="contact-item-text"><strong>WhatsApp</strong><a href="https://wa.me/5531349560780" target="_blank">(31) 3495-6078</a></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+              <div class="contact-item-text"><strong>E-mail</strong><a href="mailto:contato@nossacasaimobiliaria.com.br">contato@nossacasaimobiliaria.com.br</a></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="contact-item-text"><strong>Endereço</strong><span>Rua das Acácias, 123 – Belo Horizonte, MG</span></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-clock"></i></div>
+              <div class="contact-item-text"><strong>Horário de Atendimento</strong><span>Seg–Sex: 9h às 18h | Sáb: 9h às 13h</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <h3>Envie uma mensagem</h3>
+          <form onsubmit="handleContactForm(event)">
+            <div class="form-row">
+              <div class="form-group"><label>Nome *</label><input type="text" placeholder="Seu nome completo" required /></div>
+              <div class="form-group"><label>Telefone *</label><input type="tel" placeholder="(31) 99999-9999" required /></div>
+            </div>
+            <div class="form-group"><label>E-mail</label><input type="email" placeholder="seu@email.com" /></div>
+            <div class="form-group">
+              <label>Assunto</label>
+              <select>
+                <option value="">Selecione</option>
+                <option>Quero alugar um imóvel</option>
+                <option>Quero comprar um imóvel</option>
+                <option>Quero anunciar meu imóvel</option>
+                <option>Dúvida sobre imóvel</option>
+                <option>Outro</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Mensagem</label><textarea placeholder="Descreva o que você procura ou sua dúvida..."></textarea></div>
+            <button type="submit" class="btn btn-primary form-submit">Enviar Mensagem <i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"><img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img logo-img-footer" /></a>
+          <p class="footer-tagline">Imóveis para aluguel e venda em Belo Horizonte e região com segurança e confiança.</p>
+          <div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="https://wa.me/5531349560780" target="_blank"><i class="fab fa-whatsapp"></i></a></div>
+        </div>
+        <div class="footer-col"><h4>Navegação</h4><ul><li><a href="index.html">Home</a></li><li><a href="aluguel.html">Aluguel</a></li><li><a href="aluguel-lojas.html">Aluguel (Lojas)</a></li><li><a href="venda.html">Venda</a></li><li><a href="sobre.html">Sobre</a></li><li><a href="contato.html">Contato</a></li></ul></div>
+        <div class="footer-col"><h4>Tipos de Imóveis</h4><ul><li><a href="#">Apartamentos</a></li><li><a href="#">Casas</a></li><li><a href="#">Coberturas</a></li><li><a href="#">Lojas</a></li><li><a href="#">Salas Comerciais</a></li><li><a href="#">Terrenos</a></li></ul></div>
+        <div class="footer-col"><h4>Contato</h4><ul class="footer-contact"><li><i class="fas fa-phone"></i><a href="tel:3134958341">(31) 3495-8341</a></li><li><i class="fab fa-whatsapp"></i><a href="https://wa.me/5531349560780" target="_blank">(31) 3495-6078</a></li><li><i class="fas fa-envelope"></i><a href="mailto:contato@nossacasaimobiliaria.com.br">contato@nossacasaimobiliaria.com.br</a></li><li><i class="fas fa-map-marker-alt"></i>Rua das Acácias, 123 – Belo Horizonte, MG</li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>© 2024 Nossa Casa Imobiliária – CRECI: PJ 3.215 – Todos os direitos reservados.</p><p class="footer-dev">Desenvolvido com <i class="fas fa-heart"></i> por <a href="#">8 digital</a></p></div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function handleContactForm(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = 'Mensagem enviada!';
+      btn.style.background = '#27ae60';
+      setTimeout(() => {
+        btn.innerHTML = 'Enviar Mensagem <i class="fas fa-paper-plane"></i>';
+        btn.style.background = '';
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
