@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
     menuToggle.setAttribute('aria-expanded', 'false');
   }
 
+  // Botão X dentro do menu mobile
+  const navCloseBtn = document.createElement('button');
+  navCloseBtn.className = 'nav-close';
+  navCloseBtn.setAttribute('aria-label', 'Fechar menu');
+  navCloseBtn.innerHTML = '<i class="fas fa-times"></i>';
+  nav.appendChild(navCloseBtn);
+  navCloseBtn.addEventListener('click', closeMenu);
+
   menuToggle.addEventListener('click', () => {
     nav.classList.contains('open') ? closeMenu() : openMenu();
   });
@@ -113,6 +121,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Filtros de listagem ───────────────────────────────────────
   initFilters();
+
+  // ── Toggle de filtros no mobile ───────────────────────────────
+  const sidebar   = document.querySelector('.listings-sidebar');
+  const filterBox = document.querySelector('.filter-box');
+  if (sidebar && filterBox) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'filter-toggle-btn';
+    toggleBtn.innerHTML = '<i class="fas fa-sliders-h" style="color:var(--red)"></i> Filtrar imóveis <i class="fas fa-chevron-down toggle-arrow"></i>';
+    sidebar.insertBefore(toggleBtn, filterBox);
+
+    if (window.innerWidth <= 768) {
+      filterBox.classList.add('filter-hidden');
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      filterBox.classList.toggle('filter-hidden');
+      toggleBtn.classList.toggle('filter-open');
+    });
+  }
 
   // ── WhatsApp popup ────────────────────────────────────────────
   initWhatsAppPopup();
