@@ -155,6 +155,94 @@ tr:hover td{background:var(--g50)}
 .toast.error{background:var(--red)}
 .toast.info{background:var(--dark)}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ── MOBILE ─────────────────────────────────────────────────── */
+.mob-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  height:64px;background:var(--dark);border-top:1px solid rgba(255,255,255,.08);
+  z-index:300;align-items:stretch;
+}
+.mob-nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;color:rgba(255,255,255,.4);font-size:.6rem;font-weight:600;
+  font-family:var(--font);cursor:pointer;border:none;background:none;
+  text-transform:uppercase;letter-spacing:.3px;padding:8px 2px;
+  transition:color .2s;
+}
+.mob-nav-item i{font-size:1.15rem}
+.mob-nav-item.active{color:var(--red)}
+
+.mob-fab{
+  display:none;position:fixed;bottom:80px;right:20px;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--red);color:var(--white);font-size:1.5rem;
+  align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(192,57,43,.5);
+  z-index:250;border:none;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+}
+.mob-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(192,57,43,.6)}
+
+.prop-card-list{display:flex;flex-direction:column;gap:10px;padding:12px}
+.prop-mob-card{
+  display:grid;grid-template-columns:58px 1fr auto;
+  gap:12px;align-items:center;
+  background:var(--white);border-radius:10px;
+  border:1px solid var(--g200);padding:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.prop-mob-thumb{
+  width:58px;height:46px;border-radius:7px;overflow:hidden;
+  background:var(--g200);display:flex;align-items:center;
+  justify-content:center;font-size:1.4rem;color:var(--g500);flex-shrink:0;
+}
+.prop-mob-thumb img{width:100%;height:100%;object-fit:cover}
+.prop-mob-info{min-width:0}
+.prop-mob-info strong{
+  display:block;font-size:.88rem;font-weight:700;color:var(--dark);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;
+}
+.prop-mob-sub{font-size:.73rem;color:var(--g600);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prop-mob-price{font-size:.85rem;font-weight:700;color:var(--red)}
+.prop-mob-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding-bottom:64px}
+  .topbar{padding:14px 16px}
+  .topbar h1{font-size:1rem}
+  .content{padding:16px}
+  #btnAdd{display:none!important}
+
+  .mob-nav{display:flex}
+  .mob-fab{display:flex}
+
+  .stats{grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+  .stat-card{padding:16px;gap:12px}
+  .stat-icon{width:42px;height:42px;font-size:1.1rem}
+  .stat-info strong{font-size:1.35rem}
+  .stat-info span{font-size:.72rem}
+
+  .table-header{padding:12px 16px;flex-direction:column;align-items:flex-start;gap:10px}
+  .search-input{width:100%}
+
+  .modal-backdrop{padding:0;align-items:flex-end}
+  .modal{border-radius:20px 20px 0 0;max-width:100%;max-height:92vh;margin:0}
+  .modal-body{max-height:calc(92vh - 130px)}
+
+  .form-grid{grid-template-columns:1fr;gap:14px}
+  .form-group.full{grid-column:1}
+  .img-preview-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+
+  .confirm-backdrop{padding:20px;align-items:flex-end}
+  .confirm-box{width:100%;border-radius:16px 16px 0 0;padding:28px 24px}
+
+  #toasts{bottom:80px;right:16px;left:16px}
+  .toast{min-width:0;width:100%}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -338,6 +426,30 @@ tr:hover td{background:var(--g50)}
 <!-- TOASTS -->
 <div id="toasts"></div>
 
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mob-nav" id="mobNav" style="display:none">
+  <button class="mob-nav-item" data-cat="dashboard" onclick="setPage('dashboard')">
+    <i class="fas fa-chart-bar"></i><span>Início</span>
+  </button>
+  <button class="mob-nav-item" data-cat="aluguel" onclick="setPage('aluguel')">
+    <i class="fas fa-key"></i><span>Aluguel</span>
+  </button>
+  <button class="mob-nav-item" data-cat="lojas" onclick="setPage('lojas')">
+    <i class="fas fa-store"></i><span>Lojas</span>
+  </button>
+  <button class="mob-nav-item" data-cat="venda" onclick="setPage('venda')">
+    <i class="fas fa-home"></i><span>Venda</span>
+  </button>
+  <button class="mob-nav-item" data-cat="banner" onclick="setPage('banner')">
+    <i class="fas fa-image"></i><span>Banner</span>
+  </button>
+</nav>
+
+<!-- MOBILE FAB -->
+<button class="mob-fab" id="mobFab" onclick="openForm()" style="display:none" title="Adicionar Imóvel">
+  <i class="fas fa-plus"></i>
+</button>
+
 <script>
 // ── Estado ───────────────────────────────────────────────────
 let token       = sessionStorage.getItem('adminToken') || '';
@@ -395,15 +507,19 @@ function showLogin() { document.getElementById('loginScreen').style.display='fle
 function showApp()   {
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').style.display='flex';
+  document.getElementById('mobNav').style.display='flex';
 }
 
 // ── Navegação ────────────────────────────────────────────────
 function setPage(page) {
   currentPage = page;
   document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.cat===page));
+  document.querySelectorAll('.mob-nav-item').forEach(b => b.classList.toggle('active', b.dataset.cat===page));
   const titles = { dashboard:'Dashboard', aluguel:'Aluguel Residencial', lojas:'Aluguel de Lojas', venda:'Imóveis à Venda', banner:'Banner Principal' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   document.getElementById('btnAdd').style.display = (page==='dashboard' || page==='banner') ? 'none' : '';
+  const fab = document.getElementById('mobFab');
+  if (fab) fab.style.display = (page==='dashboard' || page==='banner') ? 'none' : 'flex';
   if (page==='dashboard') renderDashboard();
   else if (page==='banner') renderBanner();
   else renderTable(page);
@@ -440,6 +556,7 @@ function renderTable(cat) {
   const list = (properties[cat]||[]).filter(p =>
     !searchTerm || (p.titulo+p.bairro).toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const isMobile = window.innerWidth <= 768;
   document.getElementById('content').innerHTML = `
     <div class="table-wrap">
       <div class="table-header">
@@ -449,52 +566,68 @@ function renderTable(cat) {
           <input placeholder="Buscar..." oninput="onSearch(this.value)" value="${searchTerm}" />
         </div>
       </div>
-      ${list.length===0 ? `<div class="empty"><i class="fas fa-home"></i><p>Nenhum imóvel cadastrado ainda.</p></div>` : `
-      <table>
-        <thead>
-          <tr>
-            <th style="width:70px">Foto</th>
-            <th>Imóvel</th>
-            <th>Bairro</th>
-            <th>Preço</th>
-            <th>Detalhes</th>
-            <th>Fotos</th>
-            <th style="width:90px">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${list.map(p => `
-          <tr>
-            <td>
-              <div class="td-thumb">
-                ${p.imagens?.[0]
-                  ? `<img src="/images/${p.imagens[0]}" alt="" onerror="this.parentElement.innerHTML='🏠'">`
-                  : '🏠'}
-              </div>
-            </td>
-            <td>
-              <strong style="display:block;font-size:.88rem">${esc(p.titulo)}</strong>
-              <span style="font-size:.75rem;color:var(--g600)">${esc(p.tipo)}</span>
-              ${p.destaque?'<span class="badge destaque" style="margin-left:6px">Destaque</span>':''}
-            </td>
-            <td style="font-size:.85rem">${esc(p.bairro)}</td>
-            <td class="price">${fmtPreco(p.preco, cat)}</td>
-            <td style="font-size:.8rem;color:var(--g600)">
-              ${p.quartos?`<span><i class="fas fa-bed" style="color:var(--red);margin-right:3px"></i>${p.quartos}</span>&nbsp;`:''}
-              ${p.banheiros?`<span><i class="fas fa-bath" style="color:var(--red);margin-right:3px"></i>${p.banheiros}</span>&nbsp;`:''}
-              ${p.vagas?`<span><i class="fas fa-car" style="color:var(--red);margin-right:3px"></i>${p.vagas}</span>`:'-'}
-            </td>
-            <td style="font-size:.82rem;color:var(--g600)">${(p.imagens||[]).length} foto${(p.imagens||[]).length!==1?'s':''}</td>
-            <td>
-              <div class="actions">
-                <button class="btn-edit" onclick="openForm('${cat}','${p.id}')" title="Editar"><i class="fas fa-pencil-alt"></i></button>
-                <button class="btn-del"  onclick="askDelete('${cat}','${p.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
-              </div>
-            </td>
-          </tr>`).join('')}
-        </tbody>
-      </table>`}
+      ${list.length===0
+        ? `<div class="empty"><i class="fas fa-home"></i><p>Nenhum imóvel cadastrado ainda.</p></div>`
+        : isMobile ? renderMobileCards(list, cat) : renderDesktopTable(list, cat)
+      }
     </div>`;
+}
+
+function renderMobileCards(list, cat) {
+  return `<div class="prop-card-list">
+    ${list.map(p => `
+      <div class="prop-mob-card">
+        <div class="prop-mob-thumb">
+          ${p.imagens?.[0]
+            ? `<img src="/images/${p.imagens[0]}" onerror="this.parentElement.innerHTML='🏠'">`
+            : '🏠'}
+        </div>
+        <div class="prop-mob-info">
+          <strong>${esc(p.titulo)}</strong>
+          <div class="prop-mob-sub">${esc(p.tipo)} · ${esc(p.bairro)}</div>
+          <div class="prop-mob-price">${fmtPreco(p.preco, cat)}</div>
+          ${p.destaque ? '<span class="badge destaque" style="margin-top:4px;display:inline-block">Destaque</span>' : ''}
+        </div>
+        <div class="prop-mob-actions">
+          <button class="btn-edit" onclick="openForm('${cat}','${p.id}')" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+          <button class="btn-del" onclick="askDelete('${cat}','${p.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderDesktopTable(list, cat) {
+  return `<table>
+    <thead><tr>
+      <th style="width:70px">Foto</th><th>Imóvel</th><th>Bairro</th>
+      <th>Preço</th><th>Detalhes</th><th>Fotos</th><th style="width:90px">Ações</th>
+    </tr></thead>
+    <tbody>
+      ${list.map(p => `
+      <tr>
+        <td><div class="td-thumb">${p.imagens?.[0]
+          ? `<img src="/images/${p.imagens[0]}" alt="" onerror="this.parentElement.innerHTML='🏠'">`
+          : '🏠'}</div></td>
+        <td>
+          <strong style="display:block;font-size:.88rem">${esc(p.titulo)}</strong>
+          <span style="font-size:.75rem;color:var(--g600)">${esc(p.tipo)}</span>
+          ${p.destaque?'<span class="badge destaque" style="margin-left:6px">Destaque</span>':''}
+        </td>
+        <td style="font-size:.85rem">${esc(p.bairro)}</td>
+        <td class="price">${fmtPreco(p.preco, cat)}</td>
+        <td style="font-size:.8rem;color:var(--g600)">
+          ${p.quartos?`<span><i class="fas fa-bed" style="color:var(--red);margin-right:3px"></i>${p.quartos}</span>&nbsp;`:''}
+          ${p.banheiros?`<span><i class="fas fa-bath" style="color:var(--red);margin-right:3px"></i>${p.banheiros}</span>&nbsp;`:''}
+          ${p.vagas?`<span><i class="fas fa-car" style="color:var(--red);margin-right:3px"></i>${p.vagas}</span>`:'-'}
+        </td>
+        <td style="font-size:.82rem;color:var(--g600)">${(p.imagens||[]).length} foto${(p.imagens||[]).length!==1?'s':''}</td>
+        <td><div class="actions">
+          <button class="btn-edit" onclick="openForm('${cat}','${p.id}')" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+          <button class="btn-del" onclick="askDelete('${cat}','${p.id}')" title="Excluir"><i class="fas fa-trash"></i></button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
 }
 
 function onSearch(v) { searchTerm=v; renderTable(currentPage); }
