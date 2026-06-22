@@ -294,7 +294,7 @@
     fetch('/api/config').then(r => r.json()).then(cfg => {
       if (cfg.banner) {
         const img = document.getElementById('heroBg');
-        if (img) img.src = 'images/' + cfg.banner;
+        if (img) img.src = cfg.banner.startsWith('http') ? cfg.banner : 'images/' + cfg.banner;
       }
     }).catch(() => {});
 

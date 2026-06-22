@@ -69,6 +69,11 @@ function renderFeatured(data) {
   initCarousels();
 }
 
+// Suporta URLs Cloudinary (http...) e nomes de arquivo locais
+function imgSrc(val) {
+  return val && val.startsWith('http') ? val : '/images/' + val;
+}
+
 // ── Monta HTML de um card de imóvel ──────────────────────────
 function buildCard(p, cat) {
   const badgeClass = cat === 'venda' ? 'badge-venda' : cat === 'lojas' ? 'badge-comercial' : 'badge-aluguel';
@@ -82,11 +87,11 @@ function buildCard(p, cat) {
   if (imgCount === 0) {
     imgHTML = `<div class="property-img-placeholder">🏠</div>`;
   } else if (imgCount === 1) {
-    imgHTML = `<img src="/images/${imgs[0]}" alt="${esc(p.titulo)}" class="property-img" loading="lazy" />`;
+    imgHTML = `<img src="${imgSrc(imgs[0])}" alt="${esc(p.titulo)}" class="property-img" loading="lazy" />`;
   } else {
     // Múltiplas fotos: empilhadas com classe slide, primeira visível
     imgHTML = imgs.map((fn, i) =>
-      `<img src="/images/${fn}" alt="${esc(p.titulo)} ${i+1}" class="property-img card-slide${i === 0 ? ' slide-active' : ''}" loading="lazy" />`
+      `<img src="${imgSrc(fn)}" alt="${esc(p.titulo)} ${i+1}" class="property-img card-slide${i === 0 ? ' slide-active' : ''}" loading="lazy" />`
     ).join('');
     // Dots indicadores
     imgHTML += `<div class="slide-dots">

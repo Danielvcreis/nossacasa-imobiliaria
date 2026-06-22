@@ -457,7 +457,8 @@ let properties  = { aluguel:[], lojas:[], venda:[] };
 let currentPage = 'dashboard';
 let editingId   = null;
 let editingCat  = null;
-let pendingImgs = [];   // filenames já enviados (novo ou editando)
+let pendingImgs = [];   // URLs/filenames já enviados (novo ou editando)
+const imgSrc = v => v && v.startsWith('http') ? v : '/images/' + v;
 let searchTerm  = '';
 
 // ── Init ─────────────────────────────────────────────────────
@@ -579,7 +580,7 @@ function renderMobileCards(list, cat) {
       <div class="prop-mob-card">
         <div class="prop-mob-thumb">
           ${p.imagens?.[0]
-            ? `<img src="/images/${p.imagens[0]}" onerror="this.parentElement.innerHTML='🏠'">`
+            ? `<img src="${imgSrc(p.imagens[0])}" onerror="this.parentElement.innerHTML='🏠'">`
             : '🏠'}
         </div>
         <div class="prop-mob-info">
@@ -606,7 +607,7 @@ function renderDesktopTable(list, cat) {
       ${list.map(p => `
       <tr>
         <td><div class="td-thumb">${p.imagens?.[0]
-          ? `<img src="/images/${p.imagens[0]}" alt="" onerror="this.parentElement.innerHTML='🏠'">`
+          ? `<img src="${imgSrc(p.imagens[0])}" alt="" onerror="this.parentElement.innerHTML='🏠'">`
           : '🏠'}</div></td>
         <td>
           <strong style="display:block;font-size:.88rem">${esc(p.titulo)}</strong>
@@ -779,7 +780,7 @@ function renderPreviews() {
   const grid = document.getElementById('previewGrid');
   grid.innerHTML = pendingImgs.map((fn,i) => `
     <div class="img-preview">
-      <img src="/images/${fn}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2280%22><rect fill=%22%23eee%22 width=%22100%22 height=%2280%22/><text x=%2250%22 y=%2245%22 text-anchor=%22middle%22 font-size=%2224%22>📷</text></svg>'" />
+      <img src="${imgSrc(fn)}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2280%22><rect fill=%22%23eee%22 width=%22100%22 height=%2280%22/><text x=%2250%22 y=%2245%22 text-anchor=%22middle%22 font-size=%2224%22>📷</text></svg>'" />
       ${i===0?'<span class="img-cover">CAPA</span>':''}
       <button class="img-del" onclick="removeImg(${i})" title="Remover"><i class="fas fa-times"></i></button>
     </div>`).join('');
@@ -805,7 +806,7 @@ async function renderBanner() {
         <p style="font-size:.85rem;color:var(--g600);margin-bottom:20px">
           Troque a foto principal que aparece no topo da página inicial do site.
         </p>
-        <img id="bannerPreview" src="/images/${currentBanner}" alt="Banner atual"
+        <img id="bannerPreview" src="${imgSrc(currentBanner)}" alt="Banner atual"
           style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;border:1.5px solid var(--g200);display:block;margin-bottom:20px"
           onerror="this.style.display='none'" />
         <div class="upload-zone" id="bannerZone"

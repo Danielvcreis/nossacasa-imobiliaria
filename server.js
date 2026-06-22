@@ -1,8 +1,9 @@
-const express = require('express');
-const multer  = require('multer');
-const fs      = require('fs');
-const path    = require('path');
-const crypto  = require('crypto');
+const express    = require('express');
+const multer     = require('multer');
+const fs         = require('fs');
+const path       = require('path');
+const crypto     = require('crypto');
+const cloudinary = require('cloudinary').v2;
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -11,21 +12,30 @@ const DATA_FILE   = path.join(ROOT, 'data', 'properties.json');
 const CONFIG_FILE = path.join(ROOT, 'data', 'config.json');
 const IMAGES_DIR  = path.join(ROOT, 'images');
 
+// ── Cloudinary ────────────────────────────────────────────────
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+function uploadToCloud(buffer) {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: 'nossacasa', resource_type: 'image' },
+      (err, result) => err ? reject(err) : resolve(result.secure_url)
+    ).end(buffer);
+  });
+}
+
 // ── Configuração ──────────────────────────────────────────────
 const ADMIN_PASSWORD = 'nossacasa2024'; // altere aqui a senha
 let   adminToken     = null;
 
-// ── Multer (upload de imagens) ────────────────────────────────
+// ── Multer (memória – Cloudinary faz o armazenamento) ─────────
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => cb(null, IMAGES_DIR),
-    filename:    (req, file, cb) => {
-      const ext  = path.extname(file.originalname).toLowerCase() || '.jpg';
-      const name = `imovel-${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`;
-      cb(null, name);
-    }
-  }),
-  limits:     { fileSize: 15 * 1024 * 1024 },   // 15 MB por arquivo
+  storage:    multer.memoryStorage(),
+  limits:     { fileSize: 15 * 1024 * 1024 },
   fileFilter: (req, file, cb) =>
     /^image\//.test(file.mimetype) ? cb(null, true) : cb(new Error('Apenas imagens'))
 });
@@ -76,12 +86,18 @@ app.get('/api/config', (req, res) => {
 });
 
 // ── Upload do banner ──────────────────────────────────────────
-app.post('/api/banner', auth, upload.single('banner'), (req, res) => {
+app.post('/api/banner', auth, upload.single('banner'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
-  const cfg = readConfig();
-  cfg.banner = req.file.filename;
-  writeConfig(cfg);
-  res.json({ filename: req.file.filename });
+  try {
+    const url = await uploadToCloud(req.file.buffer);
+    const cfg = readConfig();
+    cfg.banner = url;
+    writeConfig(cfg);
+    res.json({ filename: url });
+  } catch (e) {
+    console.error('Cloudinary banner error:', e);
+    res.status(500).json({ error: 'Erro ao enviar banner' });
+  }
 });
 
 // ── Imóveis: leitura pública ──────────────────────────────────
@@ -127,15 +143,26 @@ app.delete('/api/properties/:category/:id', auth, (req, res) => {
 });
 
 // ── Upload de imagens ─────────────────────────────────────────
-app.post('/api/upload', auth, upload.array('imagens', 20), (req, res) => {
+app.post('/api/upload', auth, upload.array('imagens', 20), async (req, res) => {
   if (!req.files?.length) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
-  res.json({ filenames: req.files.map(f => f.filename) });
+  try {
+    const urls = await Promise.all(req.files.map(f => uploadToCloud(f.buffer)));
+    res.json({ filenames: urls });
+  } catch (e) {
+    console.error('Cloudinary upload error:', e);
+    res.status(500).json({ error: 'Erro ao enviar imagens' });
+  }
 });
 
-// ── Deletar imagem do disco ───────────────────────────────────
-app.delete('/api/images/:filename', auth, (req, res) => {
-  const fp = path.join(IMAGES_DIR, path.basename(req.params.filename));
-  if (fs.existsSync(fp)) fs.unlinkSync(fp);
+// ── Deletar imagem ────────────────────────────────────────────
+app.delete('/api/images/:filename', auth, async (req, res) => {
+  const val = decodeURIComponent(req.params.filename);
+  if (!val.startsWith('http')) {
+    // Arquivo local (compatibilidade com imagens antigas)
+    const fp = path.join(IMAGES_DIR, path.basename(val));
+    if (fs.existsSync(fp)) fs.unlinkSync(fp);
+  }
+  // Imagens Cloudinary não precisam ser deletadas imediatamente
   res.json({ ok: true });
 });
 

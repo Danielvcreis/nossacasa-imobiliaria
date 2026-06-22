@@ -268,6 +268,7 @@
 
     // Imagens
     const imgs = prop.imagens?.length ? prop.imagens : [];
+    const imgSrc = v => v && v.startsWith('http') ? v : '/images/' + v;
 
     document.getElementById('content').innerHTML = `
       <div class="detail-grid">
@@ -276,7 +277,7 @@
         <div class="gallery" id="gallery">
           <div class="gallery-main" id="galleryMain">
             ${imgs.length
-              ? `<img id="mainImg" src="/images/${imgs[0]}" alt="${prop.titulo}" />
+              ? `<img id="mainImg" src="${imgSrc(imgs[0])}" alt="${prop.titulo}" />
                  ${imgs.length > 1 ? `
                    <button class="gallery-nav prev" onclick="changeImg(-1)"><i class="fas fa-chevron-left"></i></button>
                    <button class="gallery-nav next" onclick="changeImg(1)"><i class="fas fa-chevron-right"></i></button>
@@ -289,7 +290,7 @@
             <div class="gallery-thumbs" id="thumbs">
               ${imgs.map((fn, i) => `
                 <div class="gallery-thumb ${i===0?'active':''}" onclick="setImg(${i})">
-                  <img src="/images/${fn}" alt="Foto ${i+1}" />
+                  <img src="${imgSrc(fn)}" alt="Foto ${i+1}" />
                 </div>`).join('')}
             </div>` : ''}
         </div>
@@ -335,7 +336,8 @@
     const imgs = window._imgs;
     if (!imgs?.length) return;
     window._cur = i;
-    document.getElementById('mainImg').src = `/images/${imgs[i]}`;
+    const imgSrcFn = v => v && v.startsWith('http') ? v : '/images/' + v;
+    document.getElementById('mainImg').src = imgSrcFn(imgs[i]);
     document.getElementById('imgCounter').textContent = `${i+1} / ${imgs.length}`;
     document.querySelectorAll('.gallery-thumb').forEach((t,j) => t.classList.toggle('active', j===i));
   };
