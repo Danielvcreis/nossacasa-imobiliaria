@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="../images/logo.png" />
 <title>Painel Admin | Nossa Casa Imobiliária</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -132,6 +133,7 @@ tr:hover td{background:var(--g50)}
 .uploading-indicator{display:flex;align-items:center;gap:8px;padding:10px;font-size:.82rem;color:var(--g600)}
 .uploading-indicator .spinner{width:16px;height:16px;border:2px solid var(--g300);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.mob-hidden{display:none!important}
 
 .modal-foot{padding:20px 28px;border-top:1px solid var(--g200);display:flex;justify-content:flex-end;gap:12px}
 .btn-cancel{padding:10px 22px;border-radius:8px;font-weight:600;font-size:.88rem;color:var(--g600);background:var(--g100);transition:background .2s}
@@ -427,7 +429,7 @@ tr:hover td{background:var(--g50)}
 <div id="toasts"></div>
 
 <!-- MOBILE BOTTOM NAV -->
-<nav class="mob-nav" id="mobNav" style="display:none">
+<nav class="mob-nav" id="mobNav">
   <button class="mob-nav-item" data-cat="dashboard" onclick="setPage('dashboard')">
     <i class="fas fa-chart-bar"></i><span>Início</span>
   </button>
@@ -446,7 +448,7 @@ tr:hover td{background:var(--g50)}
 </nav>
 
 <!-- MOBILE FAB -->
-<button class="mob-fab" id="mobFab" onclick="openForm()" style="display:none" title="Adicionar Imóvel">
+<button class="mob-fab mob-hidden" id="mobFab" onclick="openForm()" title="Adicionar Imóvel">
   <i class="fas fa-plus"></i>
 </button>
 
@@ -508,19 +510,19 @@ function showLogin() { document.getElementById('loginScreen').style.display='fle
 function showApp()   {
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('app').style.display='flex';
-  document.getElementById('mobNav').style.display='flex';
 }
 
 // ── Navegação ────────────────────────────────────────────────
 function setPage(page) {
   currentPage = page;
+  searchTerm = '';
   document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.cat===page));
   document.querySelectorAll('.mob-nav-item').forEach(b => b.classList.toggle('active', b.dataset.cat===page));
   const titles = { dashboard:'Dashboard', aluguel:'Aluguel Residencial', lojas:'Aluguel de Lojas', venda:'Imóveis à Venda', banner:'Banner Principal' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
   document.getElementById('btnAdd').style.display = (page==='dashboard' || page==='banner') ? 'none' : '';
   const fab = document.getElementById('mobFab');
-  if (fab) fab.style.display = (page==='dashboard' || page==='banner') ? 'none' : 'flex';
+  if (fab) fab.classList.toggle('mob-hidden', page==='dashboard' || page==='banner');
   if (page==='dashboard') renderDashboard();
   else if (page==='banner') renderBanner();
   else renderTable(page);
@@ -837,7 +839,7 @@ async function uploadBannerFiles(files) {
     const d = await r.json();
     if (!r.ok) { toast(d.error||'Erro ao enviar.','error'); return; }
     const prev = document.getElementById('bannerPreview');
-    prev.src = '/images/' + d.filename + '?_=' + Date.now();
+    prev.src = imgSrc(d.filename);
     prev.style.display = 'block';
     toast('Banner atualizado com sucesso!','success');
   } catch { toast('Erro de conexão.','error'); }
