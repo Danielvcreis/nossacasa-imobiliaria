@@ -4,13 +4,19 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── Sticky header shadow ────────────────────────────────────
+  // ── Header transparente → glass ao rolar ───────────────────
   const header = document.getElementById('header');
-  window.addEventListener('scroll', () => {
-    header.style.boxShadow = window.scrollY > 10
-      ? '0 4px 24px rgba(0,0,0,0.12)'
-      : '0 2px 12px rgba(0,0,0,0.08)';
-  });
+  const hasFullHero = !!document.querySelector('.hero'); // só homepage tem hero full-screen
+
+  function updateHeader() {
+    if (!hasFullHero) {
+      header.classList.add('scrolled'); // páginas internas: sempre glass
+      return;
+    }
+    header.classList.toggle('scrolled', window.scrollY > 80);
+  }
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
 
   // ── Mobile menu ─────────────────────────────────────────────
   const menuToggle = document.getElementById('menuToggle');
