@@ -170,7 +170,7 @@
 .contact-item-icon {
   width: 44px;
   height: 44px;
-  background: rgba(192,57,43,0.08);
+  background: rgba(26,95,180,0.08);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -248,7 +248,7 @@
 /* Tag "Desde 2001" */
 .about-tag {
   display: inline-block;
-  background: rgba(192,57,43,0.09);
+  background: rgba(26,95,180,0.09);
   color: var(--red);
   font-size: 0.78rem;
   font-weight: 700;
@@ -295,7 +295,7 @@
 .mvv-icon {
   width: 52px;
   height: 52px;
-  background: rgba(192,57,43,0.08);
+  background: rgba(26,95,180,0.08);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -402,7 +402,7 @@
 .team-avatar {
   width: 80px;
   height: 80px;
-  background: rgba(192,57,43,0.08);
+  background: rgba(26,95,180,0.08);
   border-radius: 50%;
   display: flex;
   align-items: center;

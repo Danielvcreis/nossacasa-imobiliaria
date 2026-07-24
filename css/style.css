@@ -3,8 +3,8 @@
    ============================================================ */
 
 :root {
-  --red: #C0392B;
-  --red-hover: #a93226;
+  --red: #1a5fb4;
+  --red-hover: #155099;
   --dark: #1C1C2E;
   --dark-hover: #2c2c3e;
   --white: #ffffff;
@@ -64,7 +64,7 @@ select { font-family: var(--font); }
   background: var(--red-hover);
   border-color: var(--red-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(192,57,43,0.35);
+  box-shadow: 0 6px 20px rgba(26,95,180,0.35);
 }
 .btn-dark {
   background: var(--dark);
@@ -205,7 +205,7 @@ select { font-family: var(--font); }
 }
 .nav-link:hover, .nav-link.active {
   color: var(--red);
-  background: rgba(192,57,43,0.06);
+  background: rgba(26,95,180,0.06);
 }
 .header-cta { font-size: 0.82rem; padding: 10px 22px; flex-shrink: 0; }
 
@@ -298,7 +298,7 @@ select { font-family: var(--font); }
   border-radius: 8px;
   font-weight: 700;
 }
-.hero-btn:hover { background: #a93226; }
+.hero-btn:hover { background: #155099; }
 
 /* SEARCH BAR — flutuante sobre o hero */
 .search-bar {
@@ -344,7 +344,7 @@ select { font-family: var(--font); }
   background: var(--red);
   color: #fff;
   border-color: var(--red);
-  box-shadow: 0 4px 14px rgba(192,57,43,0.3);
+  box-shadow: 0 4px 14px rgba(26,95,180,0.3);
 }
 .search-tab:hover:not(.active) {
   border-color: var(--red);
@@ -410,15 +410,15 @@ select { font-family: var(--font); }
   align-self: center;
   background: var(--red);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+  box-shadow: 0 4px 16px rgba(26,95,180,0.3);
   transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .search-btn:hover {
-  background: #a93226;
-  box-shadow: 0 6px 20px rgba(192,57,43,0.4);
+  background: #155099;
+  box-shadow: 0 6px 20px rgba(26,95,180,0.4);
   transform: translateY(-1px);
 }
 
@@ -467,7 +467,7 @@ select { font-family: var(--font); }
   border-radius: 50px;
   white-space: nowrap;
 }
-.section-link:hover { gap: 10px; background: rgba(192,57,43,0.05); }
+.section-link:hover { gap: 10px; background: rgba(26,95,180,0.05); }
 
 .properties-grid {
   display: grid;
@@ -667,7 +667,7 @@ select { font-family: var(--font); }
 .why-icon {
   width: 64px;
   height: 64px;
-  background: rgba(192,57,43,0.08);
+  background: rgba(26,95,180,0.08);
   border-radius: 50%;
   display: flex;
   align-items: center;
