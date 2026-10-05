@@ -393,7 +393,7 @@ tr:hover td{background:var(--g50)}
           <div class="upload-zone" id="uploadZone" onclick="document.getElementById('uploadInput').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <i class="fas fa-cloud-upload-alt"></i>
             <p><strong>Clique para adicionar fotos</strong></p>
-            <span>ou arraste as imagens aqui · JPG, PNG até 15MB</span>
+            <span>ou arraste as imagens aqui · JPG ou PNG</span>
           </div>
           <input type="file" id="uploadInput" accept="image/*" multiple onchange="onFileSelect(event)" />
           <div id="uploadingIndicator" style="display:none" class="uploading-indicator">
@@ -460,20 +460,24 @@ let currentPage = 'dashboard';
 let editingId   = null;
 let editingCat  = null;
 let pendingImgs = [];   // URLs/filenames já enviados (novo ou editando)
-const imgSrc = v => v && v.startsWith('http') ? v : '/images/' + v;
+// Fotos do Cloudinary saem comprimidas e no tamanho certo (w = largura máx.)
+const imgSrc = (v, w = 300) => !v ? '' : !v.startsWith('http') ? '/images/' + v
+  : v.replace('/image/upload/', `/image/upload/f_auto,q_auto,c_limit,w_${w}/`);
 let searchTerm  = '';
 
 // ── Init ─────────────────────────────────────────────────────
 (async function init() {
   if (token) {
     // Valida token fazendo uma chamada autenticada
-    const r = await fetch('/api/properties');
+    const r = await apiFetch('/api/session');
     if (r.ok) {
-      properties = await r.json();
+      properties = await (await fetch('/api/properties')).json();
       showApp();
       setPage('dashboard');
       return;
     }
+    sessionStorage.removeItem('adminToken');
+    token = '';
   }
   showLogin();
 })();
@@ -550,8 +554,27 @@ function renderDashboard() {
       <div style="padding:24px 20px">
         <p style="font-size:.9rem;color:var(--g600)">Bem-vindo ao painel administrativo. Use o menu lateral para gerenciar os imóveis, adicionar fotos e atualizar valores.</p>
         <p style="font-size:.9rem;color:var(--g600);margin-top:8px">Total geral: <strong>${tot('aluguel')+tot('lojas')+tot('venda')} imóveis</strong> cadastrados.</p>
+        <button class="btn-cancel" style="margin-top:18px" onclick="downloadBackup()">
+          <i class="fas fa-download"></i> Baixar backup dos imóveis
+        </button>
       </div>
     </div>`;
+}
+
+// ── Backup ───────────────────────────────────────────────────
+async function downloadBackup() {
+  try {
+    const [props, config] = await Promise.all([
+      fetch('/api/properties').then(r => r.json()),
+      fetch('/api/config').then(r => r.json()),
+    ]);
+    const blob = new Blob([JSON.stringify({ properties: props, config }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `backup-imoveis-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch { toast('Erro ao gerar backup.','error'); }
 }
 
 // ── Tabela ───────────────────────────────────────────────────
@@ -762,20 +785,65 @@ function onFileSelect(e){ handleFiles(e.target.files); e.target.value=''; }
 async function handleFiles(files) {
   if (!files?.length) return;
   const ind = document.getElementById('uploadingIndicator');
+  const list = Array.from(files);
+  let sent = 0;
   ind.style.display='flex';
 
-  const fd = new FormData();
-  Array.from(files).forEach(f => fd.append('imagens', f));
-
   try {
-    const r = await fetch('/api/upload', { method:'POST', headers:{'x-admin-token':token}, body:fd });
-    const d = await r.json();
-    if (!r.ok) { toast(d.error||'Erro no upload.','error'); return; }
-    pendingImgs.push(...d.filenames);
-    renderPreviews();
-    toast(`${d.filenames.length} foto${d.filenames.length!==1?'s':''} adicionada${d.filenames.length!==1?'s':''}!`,'success');
-  } catch { toast('Erro ao enviar imagens.','error'); }
+    const sig = await getUploadSignature();
+    for (const f of list) {
+      ind.lastChild.textContent = ` Enviando foto ${sent+1} de ${list.length}...`;
+      pendingImgs.push(await uploadToCloud(f, sig));
+      sent++;
+      renderPreviews();
+    }
+    toast(`${sent} foto${sent!==1?'s':''} adicionada${sent!==1?'s':''}!`,'success');
+  } catch (e) {
+    toast((sent ? `${sent} foto(s) enviadas. ` : '') + (e.message || 'Erro ao enviar imagens.'),'error');
+  }
   finally { ind.style.display='none'; }
+}
+
+// ── Envio direto para o Cloudinary ───────────────────────────
+// O servidor só assina o envio; a foto vai do navegador para o Cloudinary.
+async function getUploadSignature() {
+  const r = await apiFetch('/api/upload-signature','POST');
+  const d = await r.json();
+  if (r.status === 401) throw new Error('Sua sessão expirou. Saia e entre de novo.');
+  if (!r.ok) throw new Error(d.error || 'Erro ao preparar envio.');
+  return d;
+}
+
+async function uploadToCloud(file, sig) {
+  const fd = new FormData();
+  fd.append('file', await shrinkImage(file));
+  fd.append('api_key', sig.apiKey);
+  fd.append('timestamp', sig.timestamp);
+  fd.append('folder', sig.folder);
+  fd.append('signature', sig.signature);
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`, { method:'POST', body:fd });
+  const d = await r.json();
+  if (!r.ok) throw new Error(`Erro ao enviar "${file.name}": ${d.error?.message || r.status}`);
+  return d.secure_url;
+}
+
+// Reduz fotos grandes (ex.: celular) para no máx. 2400px antes de enviar.
+// Se o navegador não conseguir ler o formato, envia o arquivo original.
+async function shrinkImage(file, max = 2400) {
+  try {
+    const bmp = await createImageBitmap(file);
+    const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
+    if (scale === 1 && file.size < 1.5e6) return file;
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * scale);
+    c.height = Math.round(bmp.height * scale);
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(bmp, 0, 0, c.width, c.height);
+    const blob = await new Promise(res => c.toBlob(res, 'image/jpeg', 0.85));
+    return blob && blob.size < file.size ? blob : file;
+  } catch { return file; }
 }
 
 function renderPreviews() {
@@ -808,7 +876,7 @@ async function renderBanner() {
         <p style="font-size:.85rem;color:var(--g600);margin-bottom:20px">
           Troque a foto principal que aparece no topo da página inicial do site.
         </p>
-        <img id="bannerPreview" src="${imgSrc(currentBanner)}" alt="Banner atual"
+        <img id="bannerPreview" src="${imgSrc(currentBanner, 1200)}" alt="Banner atual"
           style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;border:1.5px solid var(--g200);display:block;margin-bottom:20px"
           onerror="this.style.display='none'" />
         <div class="upload-zone" id="bannerZone"
@@ -816,7 +884,7 @@ async function renderBanner() {
           ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onBannerDrop(event)">
           <i class="fas fa-cloud-upload-alt"></i>
           <p><strong>Clique para trocar o banner</strong></p>
-          <span>ou arraste uma imagem aqui · JPG, PNG até 15MB</span>
+          <span>ou arraste uma imagem aqui · JPG ou PNG</span>
         </div>
         <input type="file" id="bannerInput" accept="image/*" onchange="uploadBanner(event)" style="display:none" />
         <div id="bannerUploading" style="display:none" class="uploading-indicator">
@@ -832,17 +900,16 @@ function uploadBanner(e) { uploadBannerFiles(e.target.files); e.target.value='';
 async function uploadBannerFiles(files) {
   if (!files?.length) return;
   document.getElementById('bannerUploading').style.display='flex';
-  const fd = new FormData();
-  fd.append('banner', files[0]);
   try {
-    const r = await fetch('/api/banner', { method:'POST', headers:{'x-admin-token':token}, body:fd });
+    const url = await uploadToCloud(files[0], await getUploadSignature());
+    const r = await apiFetch('/api/banner','PUT',{ url });
     const d = await r.json();
     if (!r.ok) { toast(d.error||'Erro ao enviar.','error'); return; }
     const prev = document.getElementById('bannerPreview');
-    prev.src = imgSrc(d.filename);
+    prev.src = imgSrc(d.filename, 1200);
     prev.style.display = 'block';
     toast('Banner atualizado com sucesso!','success');
-  } catch { toast('Erro de conexão.','error'); }
+  } catch (e) { toast(e.message || 'Erro de conexão.','error'); }
   finally { document.getElementById('bannerUploading').style.display='none'; }
 }
 

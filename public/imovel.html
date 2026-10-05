@@ -107,7 +107,7 @@
     <div class="topbar-inner container">
       <div class="topbar-contacts">
         <a href="tel:3134958341"><i class="fas fa-phone"></i> (31) 3495-8341</a>
-        <a href="https://wa.me/5531994300145" target="_blank"><i class="fab fa-whatsapp"></i> (31) 3495-6078</a>
+        <a href="https://wa.me/5531983618049" target="_blank"><i class="fab fa-whatsapp"></i> (31) 98361-8049</a>
       </div>
       <div class="topbar-creci">CRECI: PJ 3.215</div>
     </div>
@@ -176,7 +176,7 @@
       <div class="cta-inner">
         <div class="cta-icon"><i class="fab fa-whatsapp"></i></div>
         <div class="cta-text"><h2>Tem dúvidas sobre este imóvel?</h2><p>Fale diretamente com um de nossos especialistas agora mesmo.</p></div>
-        <a href="https://wa.me/5531994300145" target="_blank" class="btn btn-primary cta-btn">Chamar no WhatsApp <i class="fab fa-whatsapp"></i></a>
+        <a href="https://wa.me/5531983618049" target="_blank" class="btn btn-primary cta-btn">Chamar no WhatsApp <i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </section>
@@ -187,11 +187,11 @@
         <div class="footer-brand">
           <a href="index.html" class="logo"><img src="images/logo.png" alt="Nossa Casa Imobiliária" class="logo-img logo-img-footer" /></a>
           <p class="footer-tagline">Imóveis para aluguel e venda em Belo Horizonte e região com segurança e confiança.</p>
-          <div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/nossacasaimob/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://wa.me/5531994300145" target="_blank"><i class="fab fa-whatsapp"></i></a></div>
+          <div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/nossacasaimob/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://wa.me/5531983618049" target="_blank"><i class="fab fa-whatsapp"></i></a></div>
         </div>
         <div class="footer-col"><h4>Navegação</h4><ul><li><a href="index.html">Home</a></li><li><a href="aluguel.html">Aluguel</a></li><li><a href="aluguel-lojas.html">Aluguel (Lojas)</a></li><li><a href="venda.html">Venda</a></li><li><a href="sobre.html">Sobre</a></li><li><a href="contato.html">Contato</a></li></ul></div>
         <div class="footer-col"><h4>Tipos de Imóveis</h4><ul><li><a href="#">Apartamentos</a></li><li><a href="#">Coberturas</a></li><li><a href="#">Áreas Privativas</a></li><li><a href="#">Lojas</a></li><li><a href="#">Galpões</a></li></ul></div>
-        <div class="footer-col"><h4>Contato</h4><ul class="footer-contact"><li><i class="fas fa-phone"></i><a href="tel:3134958341">(31) 3495-8341 / 3495-6078</a></li><li><i class="fab fa-whatsapp"></i><a href="https://wa.me/5531994300145" target="_blank">(31) 99430-0145</a></li><li><i class="fas fa-envelope"></i><a href="mailto:nossacasa1@hotmail.com.br">nossacasa1@hotmail.com.br</a></li><li><i class="fas fa-map-marker-alt"></i>Av. Gal. Olímpio Mourão Filho, 235 – Planalto, BH/MG</li><li><i class="fas fa-clock"></i>Seg. a Sex. das 8h às 18h</li></ul></div>
+        <div class="footer-col"><h4>Contato</h4><ul class="footer-contact"><li><i class="fas fa-phone"></i><a href="tel:3134958341">(31) 3495-8341 / 3495-6078</a></li><li><i class="fab fa-whatsapp"></i><a href="https://wa.me/5531983618049" target="_blank">(31) 98361-8049</a></li><li><i class="fas fa-envelope"></i><a href="mailto:nossacasa1@hotmail.com.br">nossacasa1@hotmail.com.br</a></li><li><i class="fas fa-map-marker-alt"></i>Av. Gal. Olímpio Mourão Filho, 235 – Planalto, BH/MG</li><li><i class="fas fa-clock"></i>Seg. a Sex. das 8h às 18h</li></ul></div>
       </div>
       <div class="footer-bottom"><p>© 2024 Nossa Casa Imobiliária – CRECI: PJ 3.215 – Todos os direitos reservados.</p><p class="footer-dev">Desenvolvido por <a href="https://zipardigital.com" target="_blank">Zipar Soluções Empresariais</a></p></div>
     </div>
@@ -199,6 +199,10 @@
 
   <script src="js/main.js"></script>
   <script>
+  // Fotos do Cloudinary saem comprimidas e no tamanho certo (w = largura máx.)
+  window._imgSrc = (v, w = 1600) => !v ? '' : !v.startsWith('http') ? '/images/' + v
+    : v.replace('/image/upload/', `/image/upload/f_auto,q_auto,c_limit,w_${w}/`);
+
   (async function () {
     const params = new URLSearchParams(window.location.search);
     const id  = params.get('id');
@@ -265,11 +269,11 @@
 
     // WhatsApp
     const waMsg = encodeURIComponent(`Olá! Tenho interesse no imóvel "${prop.titulo}" no bairro ${prop.bairro}. Poderia me dar mais informações?`);
-    const waLink = `https://wa.me/5531994300145?text=${waMsg}`;
+    const waLink = `https://wa.me/5531983618049?text=${waMsg}`;
 
     // Imagens
     const imgs = prop.imagens?.length ? prop.imagens : [];
-    const imgSrc = v => v && v.startsWith('http') ? v : '/images/' + v;
+    const imgSrc = window._imgSrc;
 
     document.getElementById('content').innerHTML = `
       <div class="detail-grid">
@@ -291,7 +295,7 @@
             <div class="gallery-thumbs" id="thumbs">
               ${imgs.map((fn, i) => `
                 <div class="gallery-thumb ${i===0?'active':''}" onclick="setImg(${i})">
-                  <img src="${imgSrc(fn)}" alt="Foto ${i+1}" />
+                  <img src="${imgSrc(fn, 300)}" alt="Foto ${i+1}" />
                 </div>`).join('')}
             </div>` : ''}
         </div>
@@ -337,8 +341,7 @@
     const imgs = window._imgs;
     if (!imgs?.length) return;
     window._cur = i;
-    const imgSrcFn = v => v && v.startsWith('http') ? v : '/images/' + v;
-    document.getElementById('mainImg').src = imgSrcFn(imgs[i]);
+    document.getElementById('mainImg').src = window._imgSrc(imgs[i]);
     document.getElementById('imgCounter').textContent = `${i+1} / ${imgs.length}`;
     document.querySelectorAll('.gallery-thumb').forEach((t,j) => t.classList.toggle('active', j===i));
   };

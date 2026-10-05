@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // WHATSAPP POPUP – flutua em todas as páginas
 // ============================================================
 function initWhatsAppPopup() {
-  const PHONE = '5531994300145';
+  const PHONE = '5531983618049';
   const MSG   = encodeURIComponent('Olá! Vim pelo site e gostaria de mais informações sobre os imóveis.');
 
   const html = `

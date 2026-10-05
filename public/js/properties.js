@@ -69,9 +69,12 @@ function renderFeatured(data) {
   initCarousels();
 }
 
-// Suporta URLs Cloudinary (http...) e nomes de arquivo locais
-function imgSrc(val) {
-  return val && val.startsWith('http') ? val : '/images/' + val;
+// Suporta URLs Cloudinary (http...) e nomes de arquivo locais.
+// Fotos do Cloudinary saem comprimidas e no tamanho certo (w = largura máx.)
+function imgSrc(val, w = 800) {
+  if (!val) return '';
+  if (!val.startsWith('http')) return '/images/' + val;
+  return val.replace('/image/upload/', `/image/upload/f_auto,q_auto,c_limit,w_${w}/`);
 }
 
 // ── Monta HTML de um card de imóvel ──────────────────────────

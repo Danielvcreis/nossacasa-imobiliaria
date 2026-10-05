@@ -1,14 +1,12 @@
 {
   "name": "nossacasa-imobiliaria",
   "version": "1.0.0",
-  "description": "Site Nossa Casa Imobiliária com painel administrativo",
-  "main": "server.js",
+  "private": true,
+  "description": "Site Nossa Casa Imobiliária com painel administrativo (Cloudflare Pages)",
   "scripts": {
-    "start": "node server.js"
+    "dev": "wrangler pages dev public --kv DADOS --port 3000 --compatibility-date=2025-09-01"
   },
-  "dependencies": {
-    "cloudinary": "^2.10.0",
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1"
+  "devDependencies": {
+    "wrangler": "^4.147.0"
   }
 }

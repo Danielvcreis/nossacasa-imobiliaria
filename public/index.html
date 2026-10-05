@@ -19,7 +19,7 @@
     <div class="topbar-inner container">
       <div class="topbar-contacts">
         <a href="tel:3134958341"><i class="fas fa-phone"></i> (31) 3495-8341</a>
-        <a href="https://wa.me/5531994300145" target="_blank"><i class="fab fa-whatsapp"></i> (31) 3495-6078</a>
+        <a href="https://wa.me/5531983618049" target="_blank"><i class="fab fa-whatsapp"></i> (31) 98361-8049</a>
       </div>
       <div class="topbar-creci">CRECI: PJ 3.215</div>
     </div>
@@ -302,7 +302,7 @@
           <h2>Fale com um de nossos especialistas agora mesmo!</h2>
           <p>Estamos prontos para te ajudar a encontrar o imóvel ideal.</p>
         </div>
-        <a href="https://wa.me/5531994300145" target="_blank" class="btn btn-primary cta-btn">
+        <a href="https://wa.me/5531983618049" target="_blank" class="btn btn-primary cta-btn">
           Chamar no WhatsApp <i class="fab fa-whatsapp"></i>
         </a>
       </div>
@@ -322,7 +322,7 @@
           <div class="footer-social">
             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://www.instagram.com/nossacasaimob/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/5531994300145" aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://wa.me/5531983618049" aria-label="WhatsApp" target="_blank"><i class="fab fa-whatsapp"></i></a>
           </div>
         </div>
 
@@ -354,7 +354,7 @@
           <h4>Contato</h4>
           <ul class="footer-contact">
             <li><i class="fas fa-phone"></i> <a href="tel:3134958341">(31) 3495-8341 / 3495-6078</a></li>
-            <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5531994300145" target="_blank">(31) 99430-0145</a></li>
+            <li><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5531983618049" target="_blank">(31) 98361-8049</a></li>
             <li><i class="fas fa-envelope"></i> <a href="mailto:nossacasa1@hotmail.com.br">nossacasa1@hotmail.com.br</a></li>
             <li><i class="fas fa-map-marker-alt"></i> Av. Gal. Olímpio Mourão Filho, 235 – Planalto, BH/MG</li>
             <li><i class="fas fa-clock"></i> Seg. a Sex. das 8h às 18h</li>
@@ -394,7 +394,9 @@
     fetch('/api/config').then(r => r.json()).then(cfg => {
       if (cfg.banner) {
         const img = document.getElementById('heroBg');
-        if (img) img.src = cfg.banner.startsWith('http') ? cfg.banner : 'images/' + cfg.banner;
+        if (img) img.src = cfg.banner.startsWith('http')
+          ? cfg.banner.replace('/image/upload/', '/image/upload/f_auto,q_auto,c_limit,w_1920/')
+          : 'images/' + cfg.banner;
       }
     }).catch(() => {});
 
