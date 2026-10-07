@@ -89,8 +89,9 @@ export async function onRequest({ request, env, params }) {
     // geramos a assinatura que autoriza o envio (vale por 1 hora).
     if (rota === 'upload-signature' && metodo === 'POST') {
       if (!(await autorizado(request, env))) return naoAutorizado();
-      if (!env.CLOUDINARY_CLOUD_NAME || !env.CLOUDINARY_API_KEY || !env.CLOUDINARY_API_SECRET)
-        return json({ error: 'Cloudinary não configurado no Cloudflare' }, 500);
+      const faltando = ['CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'].filter(k => !env[k]);
+      if (faltando.length)
+        return json({ error: `Cloudinary não configurado no Cloudflare (faltando: ${faltando.join(', ')})` }, 500);
       const timestamp = Math.floor(Date.now() / 1000);
       const signature = await sha1Hex(`folder=${PASTA_FOTOS}&timestamp=${timestamp}${env.CLOUDINARY_API_SECRET}`);
       return json({
