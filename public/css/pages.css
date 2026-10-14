@@ -241,6 +241,7 @@
 }
 .form-group textarea { min-height: 120px; }
 .form-submit { width: 100%; justify-content: center; margin-top: 4px; padding: 14px; }
+.form-hint { font-size: 0.82rem; color: var(--gray-500); text-align: center; margin-top: 10px; }
 
 /* SOBRE PAGE */
 .about-page { padding: 70px 0 80px; }

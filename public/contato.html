@@ -85,13 +85,13 @@
           <h3>Envie uma mensagem</h3>
           <form onsubmit="handleContactForm(event)">
             <div class="form-row">
-              <div class="form-group"><label>Nome *</label><input type="text" placeholder="Seu nome completo" required /></div>
-              <div class="form-group"><label>Telefone *</label><input type="tel" placeholder="(31) 99999-9999" required /></div>
+              <div class="form-group"><label for="cNome">Nome *</label><input type="text" id="cNome" placeholder="Seu nome completo" required /></div>
+              <div class="form-group"><label for="cTel">Telefone *</label><input type="tel" id="cTel" placeholder="(31) 99999-9999" required /></div>
             </div>
-            <div class="form-group"><label>E-mail</label><input type="email" placeholder="seu@email.com" /></div>
+            <div class="form-group"><label for="cEmail">E-mail</label><input type="email" id="cEmail" placeholder="seu@email.com" /></div>
             <div class="form-group">
-              <label>Assunto</label>
-              <select>
+              <label for="cAssunto">Assunto</label>
+              <select id="cAssunto">
                 <option value="">Selecione</option>
                 <option>Quero alugar um imóvel</option>
                 <option>Quero comprar um imóvel</option>
@@ -100,8 +100,9 @@
                 <option>Outro</option>
               </select>
             </div>
-            <div class="form-group"><label>Mensagem</label><textarea placeholder="Descreva o que você procura ou sua dúvida..."></textarea></div>
-            <button type="submit" class="btn btn-primary form-submit">Enviar Mensagem <i class="fas fa-paper-plane"></i></button>
+            <div class="form-group"><label for="cMsg">Mensagem</label><textarea id="cMsg" placeholder="Descreva o que você procura ou sua dúvida..."></textarea></div>
+            <button type="submit" class="btn btn-primary form-submit">Enviar pelo WhatsApp <i class="fab fa-whatsapp"></i></button>
+            <p class="form-hint">O WhatsApp abre com a sua mensagem pronta. É só tocar em enviar.</p>
           </form>
         </div>
 
@@ -127,16 +128,24 @@
 
   <script src="js/main.js"></script>
   <script>
+    // Monta a mensagem com os dados do formulário e abre o WhatsApp da imobiliária
     function handleContactForm(e) {
       e.preventDefault();
+      const v = id => document.getElementById(id).value.trim();
+      const campos = [
+        ['Nome', v('cNome')],
+        ['Telefone', v('cTel')],
+        ['E-mail', v('cEmail')],
+        ['Assunto', v('cAssunto')],
+        ['Mensagem', v('cMsg')],
+      ].filter(([, valor]) => valor).map(([rotulo, valor]) => `*${rotulo}:* ${valor}`);
+      const texto = ['Olá! Vim pelo site e gostaria de atendimento.', '', ...campos].join('\n');
+      const url = 'https://wa.me/5531983618049?text=' + encodeURIComponent(texto);
+      if (!window.open(url, '_blank')) location.href = url;
+
       const btn = e.target.querySelector('.form-submit');
-      btn.textContent = 'Mensagem enviada!';
-      btn.style.background = '#27ae60';
-      setTimeout(() => {
-        btn.innerHTML = 'Enviar Mensagem <i class="fas fa-paper-plane"></i>';
-        btn.style.background = '';
-        e.target.reset();
-      }, 3000);
+      btn.innerHTML = 'Abrindo o WhatsApp... <i class="fab fa-whatsapp"></i>';
+      setTimeout(() => { btn.innerHTML = 'Enviar pelo WhatsApp <i class="fab fa-whatsapp"></i>'; }, 3000);
     }
   </script>
 </body>
