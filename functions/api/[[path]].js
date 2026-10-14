@@ -64,6 +64,25 @@ export async function onRequest({ request, env, params }) {
       return json(prop);
     }
 
+    // Restaurar backup: substitui todos os imóveis de uma vez
+    if (rota === 'properties' && metodo === 'PUT') {
+      if (!(await autorizado(request, env))) return naoAutorizado();
+      const body = await request.json().catch(() => null);
+      if (!body || CATEGORIAS.some(c => !Array.isArray(body[c])))
+        return json({ error: 'Arquivo inválido: faltam as listas de imóveis' }, 400);
+      let seq = Date.now();
+      const data = {};
+      for (const c of CATEGORIAS) {
+        data[c] = body[c].filter(p => p && typeof p === 'object').map(({ category, ...p }) => ({
+          ...p,
+          id: p.id ? String(p.id) : String(seq++),
+          imagens: Array.isArray(p.imagens) ? p.imagens.filter(i => typeof i === 'string') : [],
+        }));
+      }
+      await salvarDados(env, data);
+      return json({ ok: true, total: CATEGORIAS.reduce((n, c) => n + data[c].length, 0) });
+    }
+
     const m = rota.match(/^properties\/([^/]+)\/([^/]+)$/);
     if (m && (metodo === 'PUT' || metodo === 'DELETE')) {
       if (!(await autorizado(request, env))) return naoAutorizado();

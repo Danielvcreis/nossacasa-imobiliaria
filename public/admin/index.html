@@ -412,12 +412,12 @@ tr:hover td{background:var(--g50)}
   </div>
 </div>
 
-<!-- CONFIRM DELETE -->
+<!-- CONFIRMAÇÃO (excluir imóvel, restaurar backup) -->
 <div class="confirm-backdrop" id="confirmBox" style="display:none">
   <div class="confirm-box">
-    <i class="fas fa-trash-alt"></i>
-    <h3>Excluir Imóvel?</h3>
-    <p>Esta ação não pode ser desfeita. O imóvel será removido permanentemente.</p>
+    <i class="fas fa-trash-alt" id="confirmIcon"></i>
+    <h3 id="confirmTitle">Excluir Imóvel?</h3>
+    <p id="confirmText">Esta ação não pode ser desfeita. O imóvel será removido permanentemente.</p>
     <div class="confirm-actions">
       <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
       <button class="btn-save" id="confirmOk">Sim, excluir</button>
@@ -554,9 +554,16 @@ function renderDashboard() {
       <div style="padding:24px 20px">
         <p style="font-size:.9rem;color:var(--g600)">Bem-vindo ao painel administrativo. Use o menu lateral para gerenciar os imóveis, adicionar fotos e atualizar valores.</p>
         <p style="font-size:.9rem;color:var(--g600);margin-top:8px">Total geral: <strong>${tot('aluguel')+tot('lojas')+tot('venda')} imóveis</strong> cadastrados.</p>
-        <button class="btn-cancel" style="margin-top:18px" onclick="downloadBackup()">
-          <i class="fas fa-download"></i> Baixar backup dos imóveis
-        </button>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px">
+          <button class="btn-cancel" onclick="downloadBackup()">
+            <i class="fas fa-download"></i> Baixar backup dos imóveis
+          </button>
+          <button class="btn-cancel" onclick="document.getElementById('backupInput').click()">
+            <i class="fas fa-upload"></i> Restaurar backup
+          </button>
+        </div>
+        <input type="file" id="backupInput" accept=".json,application/json" onchange="onBackupFile(event)" style="display:none" />
+        <p id="importStatus" style="font-size:.85rem;color:var(--g600);margin-top:10px"></p>
       </div>
     </div>`;
 }
@@ -575,6 +582,60 @@ async function downloadBackup() {
     a.click();
     URL.revokeObjectURL(a.href);
   } catch { toast('Erro ao gerar backup.','error'); }
+}
+
+// ── Restaurar backup ─────────────────────────────────────────
+// Aceita o arquivo do "Baixar backup" (ou só a lista de imóveis).
+// Fotos que ainda não estão no Cloudinary (ex.: do site antigo) são copiadas para lá.
+async function onBackupFile(e) {
+  const file = e.target.files?.[0];
+  e.target.value = '';
+  if (!file) return;
+  let data;
+  try {
+    const json = JSON.parse(await file.text());
+    data = json.properties || json;
+    if (!['aluguel','lojas','venda'].every(c => Array.isArray(data[c]))) throw 0;
+  } catch { toast('Arquivo inválido. Use um backup baixado pelo painel.','error'); return; }
+
+  const contar = d => ['aluguel','lojas','venda'].reduce((n,c) => n + (d[c]||[]).length, 0);
+  showConfirm({
+    icon: 'fa-upload',
+    title: 'Restaurar backup?',
+    text: `Os ${contar(properties)} imóveis atuais serão substituídos pelos ${contar(data)} do arquivo.`,
+    ok: 'Sim, restaurar',
+  }, () => runImport(data));
+}
+
+async function runImport(data) {
+  const status = document.getElementById('importStatus');
+  const fotos = [];
+  ['aluguel','lojas','venda'].forEach(c => data[c].forEach(p =>
+    (p.imagens||[]).forEach((u,i) => {
+      if (/^https?:\/\//.test(u) && !u.includes('res.cloudinary.com')) fotos.push({ p, i, u });
+    })));
+  let falhas = 0;
+  try {
+    if (fotos.length) {
+      const sig = await getUploadSignature();
+      for (let k = 0; k < fotos.length; k += 4) {
+        status.textContent = `Copiando fotos ${Math.min(k+4, fotos.length)} de ${fotos.length}...`;
+        await Promise.all(fotos.slice(k, k+4).map(async f => {
+          try { f.p.imagens[f.i] = await uploadToCloud(f.u, sig); } catch { falhas++; }
+        }));
+      }
+    }
+    status.textContent = 'Salvando imóveis...';
+    const r = await apiFetch('/api/properties','PUT', data);
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Erro ao salvar.');
+    properties = await (await fetch('/api/properties')).json();
+    renderDashboard();
+    toast(`${d.total} imóveis restaurados!` + (falhas ? ` ${falhas} foto(s) não foram copiadas e continuam no endereço antigo.` : ''), falhas ? 'info' : 'success');
+  } catch (e) {
+    status.textContent = '';
+    toast(e.message || 'Erro ao restaurar.','error');
+  }
 }
 
 // ── Tabela ───────────────────────────────────────────────────
@@ -759,9 +820,12 @@ async function saveProperty() {
 let pendingDelete = null;
 function askDelete(cat, id) {
   pendingDelete = {cat, id};
-  document.getElementById('confirmBox').style.display='flex';
-  document.getElementById('confirmOk').onclick = async () => {
-    closeConfirm();
+  showConfirm({
+    icon: 'fa-trash-alt',
+    title: 'Excluir Imóvel?',
+    text: 'Esta ação não pode ser desfeita. O imóvel será removido permanentemente.',
+    ok: 'Sim, excluir',
+  }, async () => {
     const r = await apiFetch(`/api/properties/${cat}/${id}`,'DELETE');
     if (r.ok) {
       properties = await (await fetch('/api/properties')).json();
@@ -769,7 +833,16 @@ function askDelete(cat, id) {
       if (currentPage==='dashboard') renderDashboard();
       toast('Imóvel excluído.','info');
     } else { toast('Erro ao excluir.','error'); }
-  };
+  });
+}
+function showConfirm({ icon, title, text, ok }, onOk) {
+  document.getElementById('confirmIcon').className = `fas ${icon}`;
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmText').textContent = text;
+  const btn = document.getElementById('confirmOk');
+  btn.textContent = ok;
+  btn.onclick = () => { closeConfirm(); onOk(); };
+  document.getElementById('confirmBox').style.display='flex';
 }
 function closeConfirm() {
   document.getElementById('confirmBox').style.display='none';
@@ -823,7 +896,7 @@ async function uploadToCloud(file, sig) {
   fd.append('signature', sig.signature);
   const r = await fetch(`https://api.cloudinary.com/v1_1/${sig.cloudName}/image/upload`, { method:'POST', body:fd });
   const d = await r.json();
-  if (!r.ok) throw new Error(`Erro ao enviar "${file.name}": ${d.error?.message || r.status}`);
+  if (!r.ok) throw new Error(`Erro ao enviar "${file.name || file}": ${d.error?.message || r.status}`);
   return d.secure_url;
 }
 
