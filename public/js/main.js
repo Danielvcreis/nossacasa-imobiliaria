@@ -27,12 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(overlay);
 
   function openMenu() {
+    header.classList.add('menu-open');
     nav.classList.add('open');
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
     menuToggle.setAttribute('aria-expanded', 'true');
   }
   function closeMenu() {
+    header.classList.remove('menu-open');
     nav.classList.remove('open');
     overlay.classList.remove('open');
     document.body.style.overflow = '';

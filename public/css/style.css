@@ -1028,6 +1028,17 @@ select { font-family: var(--font); }
     font-size: 0.95rem;
     font-weight: 500;
   }
+  /* Menu aberto: header acima do overlay e sem blur
+     (o backdrop-filter faria o menu fixed ficar preso dentro do header) */
+  .header.menu-open {
+    z-index: 300;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: none;
+  }
+  .header.menu-open .nav .nav-link { color: var(--gray-800); background: none; }
+  .header.menu-open .nav .nav-link:hover,
+  .header.menu-open .nav .nav-link.active { color: var(--red); background: rgba(26,95,180,0.06); }
   .nav-close {
     position: absolute;
     top: 14px; right: 14px;
